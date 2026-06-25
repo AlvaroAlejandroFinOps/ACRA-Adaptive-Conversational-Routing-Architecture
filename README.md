@@ -1,4 +1,5 @@
-# 🧠 ACRA: Adaptive Conversational Routing Architecture
+![alt text](IDR-1.jpeg)
+# ACRA: Adaptive Conversational Routing Architecture
 ## Orquestador de Estabilidad Cognitiva y Confiabilidad Multi-Turno
 
 [![Version](https://img.shields.io/badge/version-2.5.0-blue.svg)](https://github.com/deepmind/acra)
@@ -10,7 +11,7 @@
 
 ---
 
-## 🛠️ Arquitectura del Sistema: Flujo de Enrutamiento Adaptativo
+## Arquitectura del Sistema: Flujo de Enrutamiento Adaptativo
 
 ```mermaid
 graph TD
@@ -35,7 +36,7 @@ graph TD
 
 ---
 
-## 🏛️ Triple Perspectiva Arquitectónica
+## Triple Perspectiva Arquitectónica
 
 ### 1. Perspectiva Matemática: Rigor, Algoritmia e Integridad
 

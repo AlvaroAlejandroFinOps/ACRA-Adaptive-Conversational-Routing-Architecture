@@ -6,3 +6,4 @@ __pycache__/
 # Ignorar archivos de datos
 *.csv
 *.parquet
+*.jpeg

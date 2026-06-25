@@ -1,4 +1,6 @@
-# 🧠 ACRA: Adaptive Conversational Routing Architecture
+![alt text](IDR.jpeg)
+
+# ACRA: Adaptive Conversational Routing Architecture
 ## Cognitive Stability & Multi-Turn Reliability Orchestrator
 
 [![Version](https://img.shields.io/badge/version-2.5.0-blue.svg)](https://github.com/deepmind/acra)
