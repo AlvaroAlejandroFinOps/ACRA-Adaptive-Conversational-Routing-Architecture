@@ -1,37 +1,37 @@
 {
   "20%": {
-    "mean_performance": 51.78,
-    "unreliability": 36.28,
-    "aptitude": 70.61
+    "mean_performance": 53.1,
+    "unreliability": 43.29,
+    "aptitude": 74.11
   },
   "30%": {
-    "mean_performance": 56.76,
-    "unreliability": 31.76,
-    "aptitude": 73.03
+    "mean_performance": 57.11,
+    "unreliability": 37.66,
+    "aptitude": 74.85
   },
   "40%": {
-    "mean_performance": 60.2,
-    "unreliability": 28.8,
-    "aptitude": 73.01
+    "mean_performance": 57.47,
+    "unreliability": 26.86,
+    "aptitude": 71.47
   },
   "45%": {
-    "mean_performance": 61.07,
-    "unreliability": 23.94,
-    "aptitude": 72.94
+    "mean_performance": 60.96,
+    "unreliability": 21.84,
+    "aptitude": 72.03
   },
   "50%": {
-    "mean_performance": 63.27,
-    "unreliability": 26.3,
-    "aptitude": 76.11
+    "mean_performance": 62.74,
+    "unreliability": 18.44,
+    "aptitude": 72.02
   },
   "60%": {
-    "mean_performance": 66.8,
-    "unreliability": 13.8,
-    "aptitude": 74.04
+    "mean_performance": 65.03,
+    "unreliability": 13.61,
+    "aptitude": 71.92
   },
   "70%": {
-    "mean_performance": 67.21,
-    "unreliability": 10.48,
-    "aptitude": 72.54
+    "mean_performance": 67.15,
+    "unreliability": 10.8,
+    "aptitude": 72.21
   }
 }

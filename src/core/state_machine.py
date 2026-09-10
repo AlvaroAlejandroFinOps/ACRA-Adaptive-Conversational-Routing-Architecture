@@ -12,9 +12,13 @@ class SystemState(str, Enum):
     INGESTING = "INGESTING"
     CLARIFYING = "CLARIFYING"
     CONSOLIDATING = "CONSOLIDATING"
+    VALIDATING = "VALIDATING"
+    POLICY_REJECTED = "POLICY_REJECTED"
+    FALLBACK = "FALLBACK"
     ROUTING_PRO = "ROUTING_PRO"
     EXECUTING_PRO = "EXECUTING_PRO"
     RESPONDING = "RESPONDING"
+    REVOKED = "REVOKED"
     TERMINATED = "TERMINATED"
 
 
@@ -29,10 +33,14 @@ class ACRAStateMachine:
         SystemState.IDLE: {SystemState.INGESTING},
         SystemState.INGESTING: {SystemState.CLARIFYING, SystemState.CONSOLIDATING},
         SystemState.CLARIFYING: {SystemState.RESPONDING},
-        SystemState.CONSOLIDATING: {SystemState.ROUTING_PRO},
+        SystemState.CONSOLIDATING: {SystemState.ROUTING_PRO, SystemState.VALIDATING},
+        SystemState.VALIDATING: {SystemState.ROUTING_PRO, SystemState.POLICY_REJECTED},
+        SystemState.POLICY_REJECTED: {SystemState.FALLBACK, SystemState.REVOKED, SystemState.RESPONDING},
+        SystemState.FALLBACK: {SystemState.RESPONDING},
         SystemState.ROUTING_PRO: {SystemState.EXECUTING_PRO},
-        SystemState.EXECUTING_PRO: {SystemState.RESPONDING},
+        SystemState.EXECUTING_PRO: {SystemState.RESPONDING, SystemState.FALLBACK},
         SystemState.RESPONDING: {SystemState.IDLE, SystemState.TERMINATED},
+        SystemState.REVOKED: {SystemState.TERMINATED, SystemState.IDLE},
         SystemState.TERMINATED: set(),
     }
 

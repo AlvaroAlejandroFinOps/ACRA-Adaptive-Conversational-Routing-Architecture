@@ -1,11 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "ACRAConversationState",
-  "description": "Estado canónico estructurado de una sesión multi-turno en ACRA.",
+  "description": "Canonical structured state of a multi-turn session in ACRA including provenance and trust verification.",
   "type": "object",
   "required": ["session_id", "active_turn", "ccr", "maturity_score", "user_intents"],
   "properties": {
     "session_id": { "type": "string" },
+    "tenant_id": { "type": "string", "default": "default" },
     "active_turn": { "type": "integer", "minimum": 1 },
     "ccr": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
     "maturity_score": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
@@ -17,6 +18,32 @@
     "crystallized_artifacts": {
       "type": "array",
       "items": { "type": "string" }
+    },
+    "retained_decisions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "superseded_items": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "provenance_chain": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["turn_index", "role", "provenance", "trust_level"],
+        "properties": {
+          "turn_index": { "type": "integer" },
+          "role": { "type": "string", "enum": ["user", "assistant", "system"] },
+          "provenance": { "type": "string" },
+          "trust_level": { "type": "string", "enum": ["trusted", "verified", "untrusted", "tainted"] },
+          "source_id": { "type": "string" }
+        }
+      }
+    },
+    "trust_summary": {
+      "type": "object",
+      "additionalProperties": { "type": "integer" }
     },
     "last_snapshot_hash": { "type": "string" },
     "timestamp_epoch": { "type": "number" }

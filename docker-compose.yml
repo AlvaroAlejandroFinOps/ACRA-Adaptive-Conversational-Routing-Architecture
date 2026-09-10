@@ -1,0 +1,13 @@
+services:
+  acra-core:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: acra-runtime
+    environment:
+      - ENVIRONMENT=production-ready
+      - ACRA_SALT=acra_kernel_salt_v1
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    command: ["python", "scripts/verify_reproducibility.py"]

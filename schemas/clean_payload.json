@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ACRACleanPayload",
+  "description": "Deterministic, sterilized payload structure passed from Edge to Pro cluster.",
+  "type": "object",
+  "required": ["session_id", "target_cluster", "prefill_prompt", "ccr", "is_sterilized", "schema_version", "policy_version", "compressor_version"],
+  "properties": {
+    "session_id": { "type": "string" },
+    "target_cluster": { "type": "string", "enum": ["edge", "pro"] },
+    "prefill_prompt": { "type": "string" },
+    "ccr": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+    "is_sterilized": { "type": "boolean" },
+    "schema_version": { "type": "string" },
+    "policy_version": { "type": "string" },
+    "compressor_version": { "type": "string" },
+    "sterilization_hash": { "type": ["string", "null"] },
+    "validation_result": { "type": ["object", "null"] },
+    "metadata": { "type": "object" }
+  }
+}

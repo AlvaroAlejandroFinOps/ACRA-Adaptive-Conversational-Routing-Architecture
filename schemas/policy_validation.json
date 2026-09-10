@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ACRAPolicyValidationResult",
+  "description": "Validation result emitted by PayloadPolicyGate during static safety analysis.",
+  "type": "object",
+  "required": ["passed", "violations", "sterilization_hash", "policy_version"],
+  "properties": {
+    "passed": { "type": "boolean" },
+    "violations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["violation_type", "severity", "detail"],
+        "properties": {
+          "violation_type": {
+            "type": "string",
+            "enum": [
+              "prompt_injection",
+              "secret_leak",
+              "pii_leak",
+              "untrusted_trust_promotion",
+              "malformed_provenance",
+              "excessive_payload_size",
+              "disallowed_role"
+            ]
+          },
+          "severity": { "type": "string", "enum": ["critical", "high", "medium", "low"] },
+          "detail": { "type": "string" },
+          "location": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "sterilization_hash": { "type": "string" },
+    "policy_version": { "type": "string" },
+    "sanitized_content": { "type": ["string", "null"] },
+    "metadata": { "type": "object" }
+  }
+}

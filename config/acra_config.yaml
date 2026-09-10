@@ -1,6 +1,6 @@
-# ACRA Global Configuration File
-version: "1.0.0"
-environment: "development"
+# ACRA Global Configuration File v2.0
+version: "2.0.0"
+environment: "production-ready"
 
 routing:
   default_maturity_threshold: 0.70
@@ -10,20 +10,49 @@ routing:
     model_name: "gemini-flash-lightweight-edge"
     max_tokens: 1024
     temperature: 0.2
+    cost_per_1k_input: 0.00010
+    cost_per_1k_output: 0.00040
   pro_cluster:
     model_name: "gemini-pro-reasoning-heavy"
     max_tokens: 8192
     temperature: 0.0
+    cost_per_1k_input: 0.00125
+    cost_per_1k_output: 0.00500
 
 compression:
   target_min_ccr: 0.45
   enforce_assistant_masking: true
   preserve_code_blocks: true
   strip_conversational_chatter: true
+  extract_architectural_decisions: true
 
 caching:
   ttl_seconds: 3600
   enable_nvlink_tensor_caching_simulation: true
+  salt: "acra_kernel_salt_v1"
+
+security:
+  block_injections: true
+  block_secrets: true
+  block_pii: true
+  max_payload_bytes: 262144
+  policy_version: "1.0.0"
+  enforce_provenance_verification: true
+
+governance:
+  max_turns_per_session: 25
+  max_tokens_per_session: 64000
+  max_session_duration_sec: 600.0
+  max_cost_usd_per_session: 1.00
+
+tenants:
+  default_tenant: "default"
+  enforce_tenant_isolation: true
+
+telemetry:
+  log_level: "INFO"
+  structured_json: true
+  enable_correlation_id: true
 
 evaluation:
   benchmark_sample_size: 500
@@ -33,3 +62,6 @@ evaluation:
     - "aptitude_p90"
     - "unreliability_p10_p90"
     - "ccr"
+    - "sf_key"
+    - "sf_neg"
+    - "crr"

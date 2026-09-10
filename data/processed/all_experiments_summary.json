@@ -1,0 +1,82 @@
+{
+  "timestamp_epoch": 1789006077.7388537,
+  "total_duration_sec": 0.18,
+  "simulated": true,
+  "framework": "ACRA Adaptive Conversational Routing Architecture v2.0",
+  "experiments": {
+    "exp_01": {
+      "title": "Baseline Multi-Turn Degradation Quantification",
+      "simulated": true,
+      "results": {
+        "1": {
+          "mean_P": 65.76,
+          "aptitude_A90": 76.99,
+          "unreliability_U10_90": 24.58,
+          "std_dev": 9.53
+        },
+        "2": {
+          "mean_P": 61.27,
+          "aptitude_A90": 71.55,
+          "unreliability_U10_90": 24.03,
+          "std_dev": 10.04
+        },
+        "3": {
+          "mean_P": 58.58,
+          "aptitude_A90": 72.89,
+          "unreliability_U10_90": 27.66,
+          "std_dev": 10.56
+        },
+        "4": {
+          "mean_P": 52.7,
+          "aptitude_A90": 68.76,
+          "unreliability_U10_90": 32.98,
+          "std_dev": 12.83
+        },
+        "5": {
+          "mean_P": 49.15,
+          "aptitude_A90": 67.68,
+          "unreliability_U10_90": 36.15,
+          "std_dev": 13.8
+        },
+        "6": {
+          "mean_P": 48.45,
+          "aptitude_A90": 66.98,
+          "unreliability_U10_90": 36.02,
+          "std_dev": 15.15
+        },
+        "7": {
+          "mean_P": 41.15,
+          "aptitude_A90": 63.56,
+          "unreliability_U10_90": 41.6,
+          "std_dev": 16.27
+        },
+        "8": {
+          "mean_P": 42.1,
+          "aptitude_A90": 65.69,
+          "unreliability_U10_90": 46.03,
+          "std_dev": 19.02
+        }
+      }
+    },
+    "exp_02": {
+      "title": "A/B Testing: Raw Multi-Turn vs. ACRA Pipeline",
+      "simulated": true,
+      "results": null
+    },
+    "exp_03": {
+      "title": "Context Consolidation Ratio (CCR) Sensitivity",
+      "simulated": true,
+      "results": null
+    },
+    "exp_04": {
+      "title": "Edge Router Routing Accuracy and Early-Lock Prevention",
+      "simulated": true,
+      "results": null
+    },
+    "exp_05": {
+      "title": "Architectural Component Ablation Study",
+      "simulated": true,
+      "results": null
+    }
+  }
+}

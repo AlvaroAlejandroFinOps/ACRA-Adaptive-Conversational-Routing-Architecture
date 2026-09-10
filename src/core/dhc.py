@@ -8,7 +8,7 @@ import re
 from typing import List, Dict, Any, Tuple
 from pydantic import BaseModel, Field
 
-from .edge_router import MessageTurn, TurnRole
+from .edge_router import MessageTurn, TurnRole, ContentProvenance, TrustLevel, ContentClassification
 from .metrics import ACRAMetrics
 
 
@@ -20,6 +20,10 @@ class CompressedContext(BaseModel):
     consolidated_user_requirements: List[str]
     crystallized_code_artifacts: List[str]
     clean_history_prompt: str
+    provenance_chain: List[Dict[str, Any]] = Field(default_factory=list)
+    trust_summary: Dict[str, int] = Field(default_factory=dict)
+    retained_decisions: List[str] = Field(default_factory=list)
+    superseded_items: List[str] = Field(default_factory=list)
 
 
 class DynamicHistoryCompressor:
@@ -44,10 +48,35 @@ class DynamicHistoryCompressor:
             r"as an ai language model.*",
         ]
 
+        self.decision_markers = [
+            "decision:", "decidido:", "decisión:", "arquitectura:", "constraint:",
+            "restricción:", "patrón:", "pattern:", "protocolo:", "protocol:",
+            "selected:", "acordado:", "agreed:", "confirmed:", "definición:"
+        ]
+        self.supersede_patterns = [
+            r"olvida (lo|la|el) .*",
+            r"ignora (lo|la|el) .*",
+            r"cancel (that|previous).*",
+            r"scratch that.*",
+            r"instead of .*",
+            r"mejor no .*",
+            r"cambiemos .*",
+        ]
+
     def _estimate_tokens(self, text: str) -> int:
         """Estimación heurística de tokens (promedio 1 token = 4 caracteres / 0.75 palabras)."""
         words = len(text.split())
         return max(1, int(words * 1.35))
+
+    def extract_retained_decisions(self, text: str) -> List[str]:
+        """Extrae decisiones técnicas, contratos y restricciones acordadas sin arrastrar cháchara."""
+        decisions = []
+        for line in text.splitlines():
+            cleaned = line.strip()
+            lower = cleaned.lower()
+            if any(lower.startswith(marker) or f" {marker}" in lower for marker in self.decision_markers):
+                decisions.append(cleaned)
+        return decisions
 
     def mask_assistant_verbosity(self, assistant_content: str) -> Tuple[str, List[str]]:
         """
@@ -72,21 +101,51 @@ class DynamicHistoryCompressor:
     def compress(self, history: List[MessageTurn], current_input: str) -> CompressedContext:
         """
         Transforma un historial conversacional caótico y entrópico en un contexto consolidado estéril.
+        Preserva procedencia, verifica niveles de confianza y retiene decisiones arquitectónicas.
         """
         raw_text_accum = current_input + " " + " ".join([m.content for m in history])
         raw_tokens = self._estimate_tokens(raw_text_accum)
 
         user_intents: List[str] = []
         extracted_artifacts: List[str] = []
+        retained_decisions: List[str] = []
+        superseded_items: List[str] = []
+        provenance_chain: List[Dict[str, Any]] = []
+        trust_counts: Dict[str, int] = {
+            TrustLevel.TRUSTED.value: 0,
+            TrustLevel.VERIFIED.value: 0,
+            TrustLevel.UNTRUSTED.value: 0,
+            TrustLevel.TAINTED.value: 0,
+        }
         purged_counter = 0
 
         for turn in history:
+            # Registrar cadena de procedencia
+            provenance_entry = {
+                "turn_index": turn.turn_index,
+                "role": turn.role.value if hasattr(turn.role, "value") else str(turn.role),
+                "provenance": turn.provenance.value if hasattr(turn.provenance, "value") else str(turn.provenance),
+                "trust_level": turn.trust_level.value if hasattr(turn.trust_level, "value") else str(turn.trust_level),
+                "source_id": turn.source_id or f"turn_{turn.turn_index}",
+            }
+            provenance_chain.append(provenance_entry)
+            trust_key = turn.trust_level.value if hasattr(turn.trust_level, "value") else str(turn.trust_level)
+            trust_counts[trust_key] = trust_counts.get(trust_key, 0) + 1
+
             if turn.role == TurnRole.USER:
                 # Retención de intenciones duras
                 clean_intent = turn.content.strip()
                 if clean_intent:
+                    # Detectar si este turno invalida o reemplaza directivas anteriores
+                    intent_lower = clean_intent.lower()
+                    if any(re.search(pat, intent_lower) for pat in self.supersede_patterns):
+                        superseded_items.append(f"Turn {turn.turn_index} amended: {clean_intent}")
                     user_intents.append(clean_intent)
             elif turn.role == TurnRole.ASSISTANT:
+                # Extraer decisiones y acuerdos técnicos previos antes de enmascarar
+                decisions = self.extract_retained_decisions(turn.content)
+                retained_decisions.extend(decisions)
+
                 # Enmascaramiento asimétrico: silenciar verbosidad
                 masked_text, codes = self.mask_assistant_verbosity(turn.content)
                 extracted_artifacts.extend(codes)
@@ -95,7 +154,16 @@ class DynamicHistoryCompressor:
                     purged_counter += 1
 
         # Agregar el input actual del usuario como intención prioritaria
-        user_intents.append(current_input.strip())
+        curr_clean = current_input.strip()
+        user_intents.append(curr_clean)
+        provenance_chain.append({
+            "turn_index": len(history) + 1,
+            "role": TurnRole.USER.value,
+            "provenance": ContentProvenance.USER_DIRECT.value,
+            "trust_level": TrustLevel.UNTRUSTED.value,
+            "source_id": f"turn_{len(history) + 1}_current",
+        })
+        trust_counts[TrustLevel.UNTRUSTED.value] = trust_counts.get(TrustLevel.UNTRUSTED.value, 0) + 1
 
         # Construir el prompt consolidado de Línea Base Clean
         consolidated_sections: List[str] = []
@@ -103,8 +171,13 @@ class DynamicHistoryCompressor:
         for i, intent in enumerate(user_intents, 1):
             consolidated_sections.append(f"{i}. {intent}")
 
+        if retained_decisions:
+            consolidated_sections.append("\n### RETAINED ARCHITECTURAL DECISIONS & CONSTRAINTS:")
+            for decision in retained_decisions:
+                consolidated_sections.append(f"- {decision}")
+
         if extracted_artifacts:
-            consolidated_sections.append("\n### CONFIRMED EXECUTION ARTIFACTS / CONSTRAINTS:")
+            consolidated_sections.append("\n### CONFIRMED EXECUTION ARTIFACTS / CODE BLOCKS:")
             for artifact in extracted_artifacts:
                 consolidated_sections.append(artifact)
 
@@ -125,4 +198,8 @@ class DynamicHistoryCompressor:
             consolidated_user_requirements=user_intents,
             crystallized_code_artifacts=extracted_artifacts,
             clean_history_prompt=consolidated_prompt,
+            provenance_chain=provenance_chain,
+            trust_summary=trust_counts,
+            retained_decisions=retained_decisions,
+            superseded_items=superseded_items,
         )

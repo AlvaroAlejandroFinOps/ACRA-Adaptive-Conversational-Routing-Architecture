@@ -20,6 +20,16 @@ class MetricResult(BaseModel):
     additional_stats: Dict[str, float] = Field(default_factory=dict)
 
 
+class SemanticFidelityReport(BaseModel):
+    """Métricas avanzadas de fidelidad semántica de compresión y enrutamiento."""
+    sf_key: float = Field(..., ge=0.0, le=1.0, description="Fidelidad en retención de requerimientos clave (SF-Key)")
+    sf_neg: float = Field(..., ge=0.0, le=1.0, description="Fidelidad en exclusión de directivas anuladas/negadas (SF-Neg)")
+    crr: float = Field(..., ge=0.0, le=1.0, description="Reducción de redundancia contextual (CRR)")
+    routing_fidelity: float = Field(..., ge=0.0, le=1.0, description="Fidelidad en decisión de enrutamiento")
+    composite_fidelity: float = Field(..., ge=0.0, le=1.0, description="Score compuesto de fidelidad cognitiva")
+    details: Dict[str, Any] = Field(default_factory=dict)
+
+
 class ACRAMetrics:
     """Motor matemático de evaluación de estabilidad cognitiva para ACRA."""
 
@@ -76,6 +86,76 @@ class ACRAMetrics:
             # Caso anómalo donde la consolidación infló el prompt
             return 0.0
         return float(purged / raw_tokens)
+
+    @staticmethod
+    def calculate_sf_key(consolidated_text: str, key_requirements: List[str]) -> float:
+        """
+        SF-Key: Fracción de requerimientos técnicos clave preservados en el canvas consolidado.
+        """
+        if not key_requirements:
+            return 1.0
+        text_lower = consolidated_text.lower()
+        matched = 0
+        for req in key_requirements:
+            req_words = [w.lower() for w in req.split() if len(w) > 3]
+            if not req_words:
+                matched += 1
+                continue
+            matches_count = sum(1 for w in req_words if w in text_lower)
+            if matches_count / len(req_words) >= 0.60:
+                matched += 1
+        return float(matched / len(key_requirements))
+
+    @staticmethod
+    def calculate_sf_neg(consolidated_text: str, negated_items: List[str]) -> float:
+        """
+        SF-Neg: Fracción de directivas canceladas/reemplazadas que fueron exitosamente excluidas.
+        Un score de 1.0 indica que ninguna directiva revocada sobrevivió en el prompt.
+        """
+        if not negated_items:
+            return 1.0
+        text_lower = consolidated_text.lower()
+        leaked = 0
+        for neg in negated_items:
+            neg_words = [w.lower() for w in neg.split() if len(w) > 3]
+            if not neg_words:
+                continue
+            if all(w in text_lower for w in neg_words):
+                leaked += 1
+        return float(1.0 - (leaked / len(negated_items)))
+
+    @staticmethod
+    def evaluate_semantic_fidelity(
+        consolidated_text: str,
+        key_requirements: List[str],
+        negated_items: List[str],
+        raw_tokens: int,
+        consolidated_tokens: int,
+        expected_cluster: str,
+        actual_cluster: str,
+    ) -> SemanticFidelityReport:
+        """Genera un reporte integral de fidelidad semántica y de enrutamiento."""
+        sf_key = ACRAMetrics.calculate_sf_key(consolidated_text, key_requirements)
+        sf_neg = ACRAMetrics.calculate_sf_neg(consolidated_text, negated_items)
+        crr = ACRAMetrics.calculate_ccr(raw_tokens, consolidated_tokens)
+        routing_fidelity = 1.0 if expected_cluster.lower() == actual_cluster.lower() else 0.0
+
+        # Ponderación formal de fidelidad
+        composite = (0.35 * sf_key) + (0.25 * sf_neg) + (0.20 * crr) + (0.20 * routing_fidelity)
+
+        return SemanticFidelityReport(
+            sf_key=sf_key,
+            sf_neg=sf_neg,
+            crr=crr,
+            routing_fidelity=routing_fidelity,
+            composite_fidelity=float(composite),
+            details={
+                "key_requirements_count": len(key_requirements),
+                "negated_items_count": len(negated_items),
+                "raw_tokens": raw_tokens,
+                "consolidated_tokens": consolidated_tokens,
+            },
+        )
 
     @staticmethod
     def compute_degradation_delta(single_turn_scores: Sequence[float], multi_turn_scores: Sequence[float]) -> Dict[str, float]:

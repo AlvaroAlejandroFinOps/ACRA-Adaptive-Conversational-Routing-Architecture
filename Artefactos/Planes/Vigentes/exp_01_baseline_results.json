@@ -1,50 +1,50 @@
 {
   "1": {
-    "mean_P": 62.77,
-    "aptitude_A90": 73.86,
-    "unreliability_U10_90": 21.27,
-    "std_dev": 8.39
+    "mean_P": 65.76,
+    "aptitude_A90": 76.99,
+    "unreliability_U10_90": 24.58,
+    "std_dev": 9.53
   },
   "2": {
-    "mean_P": 60.0,
-    "aptitude_A90": 69.91,
-    "unreliability_U10_90": 20.33,
-    "std_dev": 8.35
+    "mean_P": 61.27,
+    "aptitude_A90": 71.55,
+    "unreliability_U10_90": 24.03,
+    "std_dev": 10.04
   },
   "3": {
-    "mean_P": 57.15,
-    "aptitude_A90": 71.65,
-    "unreliability_U10_90": 27.91,
-    "std_dev": 10.15
+    "mean_P": 58.58,
+    "aptitude_A90": 72.89,
+    "unreliability_U10_90": 27.66,
+    "std_dev": 10.56
   },
   "4": {
-    "mean_P": 52.9,
-    "aptitude_A90": 69.38,
-    "unreliability_U10_90": 31.24,
-    "std_dev": 12.68
+    "mean_P": 52.7,
+    "aptitude_A90": 68.76,
+    "unreliability_U10_90": 32.98,
+    "std_dev": 12.83
   },
   "5": {
-    "mean_P": 52.27,
-    "aptitude_A90": 69.2,
-    "unreliability_U10_90": 37.01,
-    "std_dev": 14.16
+    "mean_P": 49.15,
+    "aptitude_A90": 67.68,
+    "unreliability_U10_90": 36.15,
+    "std_dev": 13.8
   },
   "6": {
-    "mean_P": 50.36,
-    "aptitude_A90": 72.07,
-    "unreliability_U10_90": 42.14,
-    "std_dev": 15.99
+    "mean_P": 48.45,
+    "aptitude_A90": 66.98,
+    "unreliability_U10_90": 36.02,
+    "std_dev": 15.15
   },
   "7": {
-    "mean_P": 43.61,
-    "aptitude_A90": 65.22,
-    "unreliability_U10_90": 40.4,
-    "std_dev": 15.52
+    "mean_P": 41.15,
+    "aptitude_A90": 63.56,
+    "unreliability_U10_90": 41.6,
+    "std_dev": 16.27
   },
   "8": {
-    "mean_P": 39.03,
-    "aptitude_A90": 64.08,
-    "unreliability_U10_90": 49.82,
-    "std_dev": 19.68
+    "mean_P": 42.1,
+    "aptitude_A90": 65.69,
+    "unreliability_U10_90": 46.03,
+    "std_dev": 19.02
   }
 }
