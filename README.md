@@ -1,3 +1,4 @@
+![alt text](ACRA.jpg)
 # ACRA: Adaptive Conversational Routing Architecture
 ## Cognitive Stability and Stochastic Variance Attenuation in Multi-Turn Large Language Model Interactions
 
