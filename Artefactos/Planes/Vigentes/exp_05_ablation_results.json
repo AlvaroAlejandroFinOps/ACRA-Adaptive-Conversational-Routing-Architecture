@@ -1,37 +1,37 @@
 {
   "1_Baseline_Raw": {
     "description": "Raw Multi-Turn (Sin aislamiento ni purga)",
-    "mean_performance": 35.29,
-    "aptitude_p90": 56.23,
-    "unreliability": 41.0,
-    "variance": 299.97
+    "mean_performance": 38.22,
+    "aptitude_p90": 60.65,
+    "unreliability": 45.31,
+    "variance": 354.83
   },
   "2_EdgeRouter_Only": {
     "description": "Solo Edge Router (Previene anclaje prematuro)",
-    "mean_performance": 47.02,
-    "aptitude_p90": 63.74,
-    "unreliability": 33.38,
-    "variance": 159.21
+    "mean_performance": 45.67,
+    "aptitude_p90": 61.05,
+    "unreliability": 31.72,
+    "variance": 157.64
   },
   "3_EdgeRouter_DHC": {
     "description": "Edge Router + DHC (Filtra verbosidad y reduce bloat)",
-    "mean_performance": 53.32,
-    "aptitude_p90": 65.46,
-    "unreliability": 27.17,
-    "variance": 105.58
+    "mean_performance": 52.54,
+    "aptitude_p90": 68.7,
+    "unreliability": 32.55,
+    "variance": 133.22
   },
   "4_Edge_DHC_UCT": {
     "description": "Edge + DHC + UCT (Neutraliza Lost in the Middle)",
-    "mean_performance": 58.1,
-    "aptitude_p90": 68.6,
-    "unreliability": 22.38,
-    "variance": 77.46
+    "mean_performance": 59.13,
+    "aptitude_p90": 71.51,
+    "unreliability": 23.96,
+    "variance": 83.62
   },
   "5_ACRA_Full_Pipeline": {
     "description": "ACRA Completo (+ Handoff Clean Baseline est\u00e9ril)",
-    "mean_performance": 61.26,
-    "aptitude_p90": 72.1,
-    "unreliability": 24.81,
-    "variance": 90.62
+    "mean_performance": 63.76,
+    "aptitude_p90": 76.97,
+    "unreliability": 23.66,
+    "variance": 73.93
   }
 }

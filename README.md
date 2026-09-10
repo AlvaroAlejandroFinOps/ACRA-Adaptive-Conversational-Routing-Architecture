@@ -1,4 +1,5 @@
-![alt text](ACRA.jpg)
+![ACRA Architecture](ACRA.jpg)
+
 # ACRA: Adaptive Conversational Routing Architecture
 ## Cognitive Stability and Stochastic Variance Attenuation in Multi-Turn Large Language Model Interactions
 
@@ -23,7 +24,7 @@ The Adaptive Conversational Routing Architecture (ACRA) addresses this structura
 
 ## 2. System Architecture & Topology
 
-```
+```text
 +---------------------------------------------------------------------------------------------------------+
 |                                        ACRA SYSTEM BOUNDARY                                             |
 +---------------------------------------------------------------------------------------------------------+
@@ -143,7 +144,9 @@ Replicated across $N=100$ simulated conversational trials calibrated to empirica
 .
 ├── .github/workflows/ci.yml           # GitHub Actions automated test & verification pipeline
 ├── 001_Seed/                          # Project DNA and master architectural seeds
+│   └── seed-acra-adaptive-conversational-routing-architecture-master.md
 ├── 02_Foundation/                     # Engine foundations and RFC definitions
+│   └── Engine/EngineReadme.md
 ├── 03_Research_AI/                    # Empirical research and benchmark experiments
 │   └── experiments/
 │       ├── exp_01_baseline_degradation.py   # Baseline degradation curve simulation
@@ -158,9 +161,19 @@ Replicated across $N=100$ simulated conversational trials calibrated to empirica
 │   └── processed/                     # Empirical telemetry and experiment results
 ├── docs/
 │   ├── architecture/                  # Architectural specifications and RFCs
+│   │   ├── ACRA_Cognitive_Stability_RFC.md
+│   │   └── ACRA_System_Specification_v2.md
 │   ├── benchmarks/                    # Evaluation reports and ground truth benchmarks
+│   │   └── ACRA_Evaluation_Report.md
+│   ├── engineers_notes/               # 10 reference engineering monographs
 │   └── security/                      # Threat model (STRIDE) and trust boundaries
+│       ├── ACRA_Threat_Model.md
+│       └── ACRA_Trust_Boundaries.md
 ├── schemas/                           # JSON Schemas (conversation, decision, payload, policy)
+│   ├── clean_payload.json
+│   ├── conversation_state.json
+│   ├── policy_validation.json
+│   └── routing_decision.json
 ├── scripts/
 │   ├── generate_benchmark_dataset.py  # Deterministic dataset synthesis script
 │   ├── run_all_experiments.py         # Master research experiment runner
@@ -192,44 +205,61 @@ Replicated across $N=100$ simulated conversational trials calibrated to empirica
 
 ## 6. Verification & Operational Protocols
 
-### 6.1. Single-Command Reproducibility Audit
-To execute the complete end-to-end validation pipeline (configuration validation, all 56 tests, 64-trace dataset benchmark, and 5 research experiments):
-
+### 6.1. Environment Setup
 ```bash
-python scripts/verify_reproducibility.py
+# Clone repository
+git clone https://github.com/AlvaroAlejandroFinOps/ACRA-Adaptive-Conversational-Routing-Architecture.git
+cd ACRA-Adaptive-Conversational-Routing-Architecture
+
+# Install production dependencies and test suite tooling
+pip install -e .[dev,benchmark]
 ```
 
-### 6.2. Test Suite Execution
+### 6.2. Pipeline Execution
 ```bash
-python -m pytest tests/ --verbose
-```
-
-### 6.3. Running All Research Experiments
-```bash
+# Execute master empirical research experiments
 python scripts/run_all_experiments.py
+
+# Generate annotated 64-trace benchmark dataset
+python scripts/generate_benchmark_dataset.py
 ```
 
-### 6.4. Containerized Execution (Docker)
+### 6.3. Verification Suite & Invariant Tests
 ```bash
-docker build -t acra:latest .
-docker run --rm acra:latest
+# Execute single-command end-to-end reproducibility audit
+python scripts/verify_reproducibility.py
+
+# Run full automated test suite (56 test cases)
+python -m pytest tests/ --verbose
 ```
 
 ---
 
-## 7. BibTeX Citation & Academic References
+## 7. Domain Glossary
+
+* **Lost in Conversation (LiC):** Empirical degradation of LLM reasoning performance resulting from multi-turn interaction accumulation.
+* **Premature Anchoring (Sticking Error):** Phenomenon identified by Guo et al. (2026) where an LLM commits to an initial flawed hypothesis on ambiguous input and cannot recover.
+* **Context Consolidation Ratio (CCR):** Metric defining the proportion of conversational tokens purged during compression.
+* **Clean Baseline Handoff:** Architectural transition passing only sterilized, verified requirements to the frontier model in zero-shot equivalent prefill.
+* **Maturity Vector ($\vec{M}$):** Four-dimensional evaluation vector determining prompt readiness for deep-reasoning escalation.
+* **Unified Context Tier (UCT):** SHA-256 tenant-salted context memory store preventing "Lost in the Middle" attention decay.
+* **Payload Policy Gate:** Deterministic pre-dispatch filter enforcing STRIDE threat mitigations, injection blocking, and credential redaction.
+
+---
+
+## 8. Academic & Engineering References
+
+1. **Laban, P., et al. (2025).** *Lost in Conversation: Quantifying the Performance Collapse of Large Language Models Across Dialogue Turns.* arXiv preprint.
+2. **Guo, Y., et al. (2026).** *The Stick-or-Switch Dilemma: Premature Hypothesis Anchoring and Reasoning Degradation in Multi-Turn Systems.* arXiv preprint.
+3. **Liu, N. F., et al. (2024).** *Lost in the Middle: How Language Models Use Long Contexts.* Transactions of the Association for Computational Linguistics.
+
+### BibTeX Citation
 
 ```bibtex
-@article{acra2026architecture,
-  title={Adaptive Conversational Routing Architecture (ACRA): Cognitive Stability and Stochastic Variance Attenuation in Multi-Turn Large Language Model Interactions},
-  author={FinOps Cloud Architecture Team},
-  year={2026},
-  journal={arXiv preprint},
-  url={https://github.com/AlvaroAlejandroFinOps/ACRA-Adaptive-Conversational-Routing-Architecture}
+@software{acra_2026_architecture,
+  author = {FinOps Cloud Architecture Team},
+  title = {ACRA: Adaptive Conversational Routing Architecture - Cognitive Stability and Stochastic Variance Attenuation in Multi-Turn Large Language Model Interactions},
+  year = {2026},
+  url = {https://github.com/AlvaroAlejandroFinOps/ACRA-Adaptive-Conversational-Routing-Architecture}
 }
 ```
-
-### Academic References:
-1. **Laban, P., et al. (2025).** *Lost in Conversation: Quantifying the Performance Collapse of Large Language Models Across Dialogue Turns.*
-2. **Guo, Y., et al. (2026).** *The Stick-or-Switch Dilemma: Premature Hypothesis Anchoring and Reasoning Degradation in Multi-Turn Systems.*
-3. **Liu, N. F., et al. (2024).** *Lost in the Middle: How Language Models Use Long Contexts.* Transactions of the Association for Computational Linguistics.
