@@ -1,0 +1,35 @@
+# ACRA Global Configuration File
+version: "1.0.0"
+environment: "development"
+
+routing:
+  default_maturity_threshold: 0.70
+  min_turns_before_pro: 1
+  max_clarification_turns: 4
+  edge_cluster:
+    model_name: "gemini-flash-lightweight-edge"
+    max_tokens: 1024
+    temperature: 0.2
+  pro_cluster:
+    model_name: "gemini-pro-reasoning-heavy"
+    max_tokens: 8192
+    temperature: 0.0
+
+compression:
+  target_min_ccr: 0.45
+  enforce_assistant_masking: true
+  preserve_code_blocks: true
+  strip_conversational_chatter: true
+
+caching:
+  ttl_seconds: 3600
+  enable_nvlink_tensor_caching_simulation: true
+
+evaluation:
+  benchmark_sample_size: 500
+  significance_alpha: 0.05
+  metrics:
+    - "mean_performance"
+    - "aptitude_p90"
+    - "unreliability_p10_p90"
+    - "ccr"

@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ACRARoutingDecision",
+  "description": "Contrato de decisión de enrutamiento emitido por el Edge Router.",
+  "type": "object",
+  "required": ["decision_id", "session_id", "turn", "action", "maturity_score", "target_cluster"],
+  "properties": {
+    "decision_id": { "type": "string" },
+    "session_id": { "type": "string" },
+    "turn": { "type": "integer", "minimum": 1 },
+    "action": { "type": "string", "enum": ["clarify", "hold", "dispatch_pro"] },
+    "maturity_score": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+    "target_cluster": { "type": "string", "enum": ["edge", "pro"] },
+    "reasoning": { "type": "string" },
+    "timestamp_epoch": { "type": "number" }
+  }
+}

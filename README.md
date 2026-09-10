@@ -1,137 +1,84 @@
-![alt text](IDR.jpeg)
 # ACRA: Adaptive Conversational Routing Architecture
-## Cognitive Stability & Multi-Turn Reliability Orchestrator
+## Cognitive Stability for Multi-Turn Large Language Model Interactions
 
-[![Version](https://img.shields.io/badge/version-2.5.0-blue.svg)](https://github.com/deepmind/acra)
-[![License](https://img.shields.io/badge/license-Apache%202.0-green.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
-[![Hardware](https://img.shields.io/badge/hardware-NVIDIA%20H100%20%7C%20A100-orange.svg)](https://www.nvidia.com/)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![Python: 3.10+](https://img.shields.io/badge/Python-3.10%2B-brightgreen.svg)](https://python.org)
+[![Tests: 15 Passed](https://img.shields.io/badge/Tests-15%20Passed-success.svg)](tests/)
+[![Paper Draft: Ready](https://img.shields.io/badge/Paper-Draft%20Available-orange.svg)](Artefactos/Planes/Vigentes/ACRA_Academic_Paper_Draft.md)
 
-**ACRA (Adaptive Conversational Routing Architecture)** is an industrial-grade framework originally designed to maximize infrastructure efficiency and VRAM density through dynamic routing between light and heavy clusters. Under the standards of the present **Cognitive Stability RFC**, ACRA evolves to become the first conversational state orchestrator engineered specifically to neutralize cognitive collapse (*Lost in Conversation*) in multi-turn, multi-party Large Language Model (LLM) interactions.
+ACRA es un framework arquitectónico de orquestación de estado diseñado para resolver la **degradación cognitiva multi-turno** en Modelos de Lenguaje Grandes (LLMs). Sin requerir reentrenamiento de pesos ni sobrecoste de cómputo en inferencia, ACRA recupera hasta un **+38.36%** del rendimiento degradado en diálogos extendidos y reduce la infiabilidad estocástica en un **-75.08%**.
 
 ---
 
-## System Architecture: Adaptive Routing Flow
+## Estructura del Repositorio
 
-```mermaid
-graph TD
-    User([User / Multi-Turn Interaction]) -->|Conversational Payload| EdgeRouter[Edge Router: Light Cluster]
-    
-    subgraph Clarification & Classification Phase
-        EdgeRouter -->|Specification Mature? NO| Clarify[Clarification Phase / Iterative Dialogue]
-        Clarify --> EdgeRouter
-    end
-    
-    subgraph Unified Context Tier
-        EdgeRouter -->|Specification Mature? YES| DHC[Dynamic History Compression - DHC]
-        DHC -->|Noise Filtering & Purged Context| Masking[Assistant Response Masking]
-        Masking -->|Hard Intents Rehydration| Cache[(Unified Context Cache / NVSwitch)]
-    end
-    
-    subgraph Deep Reasoning Cluster
-        Cache -->|Direct Injection in Prefill Phase| ProCluster[Pro/Heavy Reasoning Cluster]
-        ProCluster -->|Clean Response Generation| Output([Stabilized Response to User])
-    end
+```
+├── 001_Seed/                  # Semilla y ADN del proyecto
+├── 02_Foundation/Engine/      # Guía de gobernanza de directorios
+├── 03_Research_AI/            # Scripts de experimentos y notebooks
+│   └── experiments/           # 5 experimentos científicos reproducibles (exp_01 a exp_05)
+├── Artefactos/Planes/Vigentes/# Entregables académicos (Paper Draft, Benchmark Report, JSONs)
+├── config/                    # Configuración global (acra_config.yaml)
+├── docs/                      # RFCs, notas de ingeniería y especificaciones técnicas
+│   ├── architecture/          # ACRA_Cognitive_Stability_RFC.md
+│   ├── engineers_notes/       # 10 notas con fundamentación bibliográfica (ref_01 a ref_10)
+│   └── technical_specs/       # ACRA_Technical_Specification_v1.md
+├── schemas/                   # Esquemas JSON formales (conversation_state, routing_decision)
+├── src/                       # Código fuente modular
+│   ├── core/                  # Motor ACRA (metrics, router, DHC, UCT, handoff, orchestrator)
+│   └── data_generation/       # Generador de conversaciones sintéticas multi-turno
+└── tests/                     # Suite de 15 tests unitarios e integrados (run_all_tests.py)
 ```
 
 ---
 
-## Triple Architectural Perspective
+## Quickstart
 
-### 1. Mathematical Perspective: Rigor, Algorithmics & Integrity
-
-The systemic failure of frontier LLMs in multi-turn interactions is formalized by analyzing their performance over a set of conversational simulations $S=\{S_i\}_{i=1}^{N}$. We decompose the model's performance into three fundamental metrics:
-
-* **Average Performance ($\overline{P}$):** The unbiased mean success rate of the model in a given environment.
-  $$\overline{P}=\frac{1}{N}\sum_{i=1}^{N}S_i$$
-* **Aptitude ($A^{90}$):** The theoretical upper bound of the model's capacity in its best-case scenario (90th percentile).
-  $$A^{90}=\text{percentile}_{90}(S)$$
-* **Unreliability ($U_{10}^{90}$):** The stochastic gap between the best and worst theoretical generation cases (inter-percentile range).
-  $$U_{10}^{90}=\text{percentile}_{90}(S)-\text{percentile}_{10}(S)$$
-
-#### Multi-Turn Degradation Analysis
-* **Generative Drop:** Models experience an average **39%** drop in performance when moving from single-turn instructions to multi-turn interactions.
-* **Capacity Preservation:** Aptitude ($A^{90}$) decreases by a marginal **16%**, proving that the underlying model retains its technical competence.
-* **Unreliability Explosion:** Unreliability ($U_{10}^{90}$) spikes by **112%** due to cascading errors (stochastic deviation of early tokens in the Markov decision chain).
-
-#### Stability KPI: Context Consolidation Ratio (CCR)
-To monitor cluster cognitive health in real time, ACRA introduces the **CCR**:
-$$\text{CCR} = \frac{\text{Purged Context Tokens}}{\text{Total Tokens in Conversational History}} \times 100$$
-* **Production Mandate:** The system must maintain a **CCR > 45%** in conversations exceeding three turns, ensuring the minimization of *Answer Bloat*.
-
----
-
-### 2. Logical Perspective: Topology, Efficiency & Structure
-
-ACRA's topology decouples the conversational state from stochastic generation loops through the following mechanisms:
-
-* **Edge Router & Early Isolation:** Implements a light cluster for the initial clarification phase (0-20% of the chat). The deep reasoning Pro cluster remains idle until the requirements specification is mature.
-* **Unified Context Tier & Caching:** Purged and consolidated contexts are directly injected as dense tensors into the target cluster using high-speed physical interconnects like **NVSwitch** and **NVLink**, dramatically optimizing the *Prefill Phase*.
-* **Dynamic History Compression (DHC):** Purges speculative text, redundant explanations, and junk code generated in previous turns during cluster transitions.
-* **Assistant Response Masking:** Systematically discards explanatory verbosity generated by the LLM in previous turns, rehydrating only the hard user requirements and validated execution blocks into the Pro cluster's prompt.
-
----
-
-### 3. Creative Perspective: Innovation & Information Design
-
-* **Markov Cascade Disruption:** By forcing each Pro cluster invocation to operate on a cognitively sterile canvas (equivalent to a clean Zero-Shot prompt), ACRA interrupts the mathematical progression of hallucinations caused by early token deviations.
-* **Business Translation Layer (SLA Guardrail):** Acts as a smart circuit breaker. If the accumulated unreliability in the conversational buffer exceeds business tolerance thresholds, the system asynchronously re-routes the payload to a prompt refinement loop and sends structured alerts to the SRE team.
-* **Cognitive Observability Design:** Structured mapping and logging that visualizes real-time cluster variance dispersion, prompt entropy, and CCR efficiency through interactive SRE dashboards.
-
----
-
-## 📂 Data & Lakehouse Layer Structure
-
-ACRA organizes all interaction telemetry and logs in a three-tier Lakehouse storage architecture, optimized using Delta Parquet with V-Order / Z-Order compression:
-
-```
-┌───────────────────────────────────────────────────────────────────────────┐
-│ 🪙 BRONZE: Raw Transaction Capture & Conversational Logs (Raw JSON)       │
-└─────────────────────────────────────┬─────────────────────────────────────┘
-                                      │ (Cleaning, Tokenization & Parsing)
-                                      ▼
-┌───────────────────────────────────────────────────────────────────────────┐
-│ 🥈 SILVER: Structured Telemetry, Performance Metrics & Entropy Metrics     │
-└─────────────────────────────────────┬─────────────────────────────────────┘
-                                      │ (Aggregation & CCR Calculations)
-                                      ▼
-┌───────────────────────────────────────────────────────────────────────────┐
-│ 🥇 GOLD: Cognitive Health Reports, SLA & Inference Dashboards             │
-└───────────────────────────────────────────────────────────────────────────┘
-```
-
----
-
-## 🚀 Deployment & Quick Start Guide
-
-### Prerequisites
-* Python 3.10 or higher
-* CUDA Toolkit 12.2+ (for native GPU acceleration support)
-* NVLink infrastructure access (Highly recommended for production environments)
-
-### Local Setup
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/deepmind/acra.git
-   cd acra
-   ```
-2. Install dependencies and the package in editable mode:
-   ```bash
-   pip install -e .
-   ```
-3. Run unit tests to verify cluster initialization:
-   ```bash
-   pytest tests/
-   ```
-
-### Production Deployment (Fabric / Kubernetes)
-To deploy the dynamic routing topology with Unified Context Tier support:
+### 1. Ejecutar la Suite Completa de Tests
 ```bash
-python scripts/deploy_routing_mesh.py --config config/production_mesh.json --enable-nvswitch
+python tests/run_all_tests.py
+```
+
+### 2. Reproducir los Experimentos Científicos
+```bash
+# Experimento 01: Degradación baseline (Laban et al., 2025)
+python 03_Research_AI/experiments/exp_01_baseline_degradation.py
+
+# Experimento 02: A/B Testing Baseline vs. ACRA Pipeline
+python 03_Research_AI/experiments/exp_02_acra_vs_baseline.py
+
+# Experimento 03: Análisis de Sensibilidad CCR (Context Consolidation Ratio)
+python 03_Research_AI/experiments/exp_03_ccr_sensitivity.py
+
+# Experimento 04: Precisión del Edge Router y Prevención de Anclaje
+python 03_Research_AI/experiments/exp_04_edge_router_accuracy.py
+
+# Experimento 05: Estudio de Ablación Arquitectónica
+python 03_Research_AI/experiments/exp_05_ablation_study.py
 ```
 
 ---
 
-## 📄 License
+## Principales Resultados Empíricos
 
-This project is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for details.
+| Métrica | Baseline Raw Multi-Turn | ACRA Pipeline | Impacto |
+|:---|:---:|:---:|:---:|
+| **Rendimiento Promedio ($P̄$)** | 39.52 | **54.68** | **+38.36% Recuperación** |
+| **Infiabilidad ($U_{10}^{90}$)** | 50.54 | **12.59** | **-75.08% Estabilización** |
+| **Varianza ($\sigma^2$)** | 346.97 | **23.16** | **-93.32% Reducción de Ruido** |
+| **Ratio de Consolidación (CCR)** | N/A | **30.6% - 65.0%** | **Mandato de Purga Cumplido** |
+
+---
+
+## Entregables Académicos
+
+- [Draft de Paper Académico (Paper-Grade)](Artefactos/Planes/Vigentes/ACRA_Academic_Paper_Draft.md)
+- [Reporte Consolidado de Benchmarks](Artefactos/Planes/Vigentes/ACRA_Benchmark_Report.md)
+- [Especificación Técnica v1.0](docs/technical_specs/ACRA_Technical_Specification_v1.md)
+- [RFC Arquitectónico de Estabilidad Cognitiva](docs/architecture/ACRA_Cognitive_Stability_RFC.md)
+
+---
+
+## Licencia
+
+Distribuido bajo la Licencia Apache 2.0. Consulte `LICENSE` para obtener más información.

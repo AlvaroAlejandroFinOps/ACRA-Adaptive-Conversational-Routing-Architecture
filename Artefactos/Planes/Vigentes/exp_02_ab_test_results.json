@@ -1,0 +1,31 @@
+{
+  "baseline": {
+    "mean_performance": 39.52012374639745,
+    "aptitude_p90": 64.81534048182745,
+    "unreliability_p10_p90": 50.53955876818381,
+    "sample_size": 100,
+    "additional_stats": {
+      "std_dev": 18.62717287315037,
+      "variance": 346.971569246229,
+      "p10": 14.27578171364364,
+      "p50_median": 40.538827820403704
+    }
+  },
+  "acra": {
+    "mean_performance": 54.68037388294776,
+    "aptitude_p90": 61.398493500420734,
+    "unreliability_p10_p90": 12.59199163041933,
+    "sample_size": 100,
+    "additional_stats": {
+      "std_dev": 4.812129923877739,
+      "variance": 23.156594404279577,
+      "p10": 48.806501870001405,
+      "p50_median": 54.82110778267883
+    }
+  },
+  "deltas": {
+    "performance_recovery_pct": 38.36083670646977,
+    "unreliability_reduction_pct": 75.08488016649174,
+    "mean_ccr": 0.30606558192765093
+  }
+}

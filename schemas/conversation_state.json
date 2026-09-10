@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ACRAConversationState",
+  "description": "Estado canónico estructurado de una sesión multi-turno en ACRA.",
+  "type": "object",
+  "required": ["session_id", "active_turn", "ccr", "maturity_score", "user_intents"],
+  "properties": {
+    "session_id": { "type": "string" },
+    "active_turn": { "type": "integer", "minimum": 1 },
+    "ccr": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+    "maturity_score": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+    "target_cluster": { "type": "string", "enum": ["edge", "pro"] },
+    "user_intents": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "crystallized_artifacts": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "last_snapshot_hash": { "type": "string" },
+    "timestamp_epoch": { "type": "number" }
+  }
+}
