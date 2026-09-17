@@ -66,8 +66,9 @@ class ContextEngineeringPipeline:
         seen: set[str] = set()
         deduped: list[ToolResult] = []
         for tr in reversed(tool_results):
-            if tr.tool_name not in seen:
-                seen.add(tr.tool_name)
+            name = tr.tool_name if hasattr(tr, "tool_name") else (tr.get("tool_name", "") if isinstance(tr, dict) else str(tr))
+            if name not in seen:
+                seen.add(name)
                 deduped.append(tr)
         return list(reversed(deduped))
 

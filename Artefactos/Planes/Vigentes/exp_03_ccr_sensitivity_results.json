@@ -1,0 +1,37 @@
+{
+  "20%": {
+    "mean_performance": 53.24,
+    "unreliability": 41.75,
+    "aptitude": 73.82
+  },
+  "30%": {
+    "mean_performance": 53.76,
+    "unreliability": 33.91,
+    "aptitude": 70.75
+  },
+  "40%": {
+    "mean_performance": 60.27,
+    "unreliability": 26.71,
+    "aptitude": 72.82
+  },
+  "45%": {
+    "mean_performance": 61.77,
+    "unreliability": 21.54,
+    "aptitude": 72.79
+  },
+  "50%": {
+    "mean_performance": 63.75,
+    "unreliability": 20.45,
+    "aptitude": 73.81
+  },
+  "60%": {
+    "mean_performance": 65.96,
+    "unreliability": 15.66,
+    "aptitude": 73.83
+  },
+  "70%": {
+    "mean_performance": 67.71,
+    "unreliability": 9.87,
+    "aptitude": 72.7
+  }
+}

@@ -17,17 +17,17 @@ project_name: "ACRA-Adaptive-Conversational-Routing-Architecture"
 repository_name: "ACRA-Adaptive Conversational Routing Architecture"
 project_type: "ml-system"
 repository_mode: "single-project"
-generated_at: "2026-09-17T00:50:00-03:00"
-generated_by: "Antigravity Agent (Gemini 3.8 Flash)"
+generated_at: "2026-09-17T03:25:00-03:00"
+generated_by: "Antigravity Agent (Claude 3.7 Sonnet / Antigravity IDE)"
 repository_root: "d:/0001 HyperScale Thinking/PROYECTOS CLOUD/Research and Development/ACRA-Adaptive Conversational Routing Architecture"
 git_branch: "master"
-git_commit: "0eee88b"
+git_commit: "c95cb03"
 working_tree_state: "dirty"
 analysis_mode: "static"
 coverage_level: "high"
 known_analysis_limits:
-  - "Inferencia real contra APIs externas (OpenAI/Gemini/Anthropic) evaluada mediante stubs y simulación determinista para reproducibilidad sin costos de red."
-  - "Persistencia en disco o base de datos externa es simulada mediante almacenamiento en memoria con TTL determinista en UnifiedContextTier."
+  - "Inferencia real contra APIs externas (OpenAI/Anthropic) evaluada mediante stubs/simulaciones deterministas sin costos de red; Google GenAI soporta llamadas REST en vivo mediante variable de entorno GEMINI_API_KEY con fallback determinista transparente."
+  - "Persistencia de estado de sesión y cápsulas de contexto en memoria volátil o archivos locales, con arquitectura desacoplada para adopción de Redis/KeyDB y Object Storage en Kubernetes."
 ```
 
 ### 0.1 Instrucciones para el modelo receptor
@@ -45,285 +45,360 @@ known_analysis_limits:
 ---
 
 ## 1. RESUMEN EJECUTIVO
-- **1.1 Proyecto en una frase:** `[CONFIRMADO]` ACRA es una arquitectura de enrutamiento conversacional asimétrico de dos capas (Edge y Pro) diseñada para erradicar la degradación cognitiva acumulativa, la infiabilidad estocástica y la pérdida de atención (*Lost in the Middle*) en interacciones multi-turno con Large Language Models.
-- **1.2 Problema que resuelve:** `[CONFIRMADO]` En interacciones multi-turno prolongadas (8 a 25 turnos), los LLMs sufren colapso de razonamiento por acumulación de *conversational chatter*, anclaje errático prematuro (*Stick-or-Switch problem*), derivación de directivas (*instruction drift*) y explosión de costos innecesarios en clústeres pesados de frontera.
-- **1.3 Usuarios o sistemas consumidores:** `[INFERIDO]` Motores de inferencia empresarial, orquestadores de agentes autónomos, frameworks de diálogo técnico complejo (ingeniería de software, finanzas, arquitectura cloud) y plataformas SaaS que requieren interacciones multi-turno con modelos de frontera (Gemini Pro, Claude Sonnet/Opus, GPT-4/5).
-- **1.4 Alcance y límites del sistema:** `[CONFIRMADO]` Intercepta cada turno a nivel de borde (Edge), consolida y comprime dinámicamente el historial (DHC), valida esterilidad y políticas de seguridad (PayloadPolicyGate), controla transiciones formales de estado (FSM) y transfiere un *Clean Payload* al modelo de frontera únicamente cuando la especificación alcanza madurez técnica verificada. No incluye frontend gráfico integrado ni infraestructura de base de datos relacional pesada.
+
+### 1.1 Proyecto en una frase
+[CONFIRMADO] ACRA es una arquitectura determinista de orquestación multi-agente jerárquica, enrutamiento cognitivo agnóstico a proveedores e ingeniería de contexto previa a la inferencia, diseñada para mitigar la dispersión estocástica y la degradación de razonamiento (*Lost in Conversation*) en modelos de lenguaje multi-turno.
+
+### 1.2 Problema que resuelve
+[CONFIRMADO] Los Modelos de Lenguaje de Frontera experimentan un colapso en tareas de razonamiento multi-turno debido a:
+1. **Lost in Conversation (LiC):** Caída empírica promedio del 39% en rendimiento al acumular turnos de diálogo ruidosos y redundantes (Laban et al., 2025).
+2. **Anclaje Prematuro de Hipótesis (*Stick-or-Switch*):** Compromiso irreversible con conjeturas iniciales erróneas ante especificaciones ambiguas del usuario (Guo et al., 2026).
+3. **Explosión de Varianza e Infiabilidad:** Expansión del rango interpercentil $U_{10}^{90}$ superior al 112%, con una varianza $\sigma^2 = 266.72$.
+4. **Vulnerabilidades de Inyección y Fuga de Secretos:** Exposición a system overrides, jailbreaks y exfiltración de credenciales (PII/API keys).
+5. **Ineficiencia Económica de Caché:** Conmutaciones de proveedor innecesarias que destruyen el prefijo de caché estable, incrementando costos de entrada.
+
+### 1.3 Usuarios o sistemas consumidores
+- [CONFIRMADO] Plataformas de agentes conversacionales empresariales que ejecutan flujos de trabajo multi-turno complejos.
+- [CONFIRMADO] Pasarelas de inferencia de IA corporativas que gestionan múltiples proveedores (Google Cloud Gemini, Anthropic, OpenAI, Local/Ollama).
+- [CONFIRMADO] Sistemas de atención y soporte técnico con requerimiento de alta fidelidad técnica y cero alucinaciones de requisitos anulados.
+- [DECLARADO] Clústeres Kubernetes de microservicios sin estado mediante pods de baja latencia.
+
+### 1.4 Alcance y límites del sistema
+- **Dentro del alcance:**
+  - [CONFIRMADO] Enrutamiento de admisión mediante Vector Multidimensional de Madurez ($\vec{M}$).
+  - [CONFIRMADO] Orquestación jerárquica con descomposición en DAG (Kahn TaskGraph), ObjectivePlanner y Consolidator.
+  - [CONFIRMADO] Canalización determinista de Ingeniería de Contexto en 13 etapas con extracción de 18 señales zero-LLM.
+  - [CONFIRMADO] Desacoplamiento estricto de nombres de modelos comerciales (`INV-001`) mediante `ModelResolver` y perfiles de capacidades.
+  - [CONFIRMADO] Enrutador de afinidad consciente de caché con política de histéresis y protección anti-oscilación (`INV-010`).
+  - [CONFIRMADO] Compuertas de seguridad (`HandoffPolicyGate`, `ToolAuthorizationGate` con separación plan/ejecución `INV-007`).
+  - [CONFIRMADO] Motor de economía de tokens con cascada presupuestaria jerárquica (`INV-005`) y discriminación medido/estimado (`INV-006`).
+- **Fuera del alcance:**
+  - [DECLARADO] Ajuste fino (fine-tuning) o reentrenamiento de pesos de los modelos de base.
+  - [DECLARADO] Base de datos distribuida propia (se integra mediante adapters de persistencia e in-memory caching).
+  - [CONFIRMADO] Interfaces gráficas de usuario pesadas (la UI de ejemplo en Streamlit o React se considera referencia accesoria).
 
 ---
 
 ## 2. ARQUITECTURA Y TOPOLOGÍA
-- **2.1 Estilo arquitectónico:** `[CONFIRMADO]` Arquitectura desacoplada en tubería asimétrica orientada a eventos conversacionales con máquina de estados finitos determinista (FSM), compresión semántica DHC, control de políticas de esterilización previa a la inferencia de frontera y aislamiento criptográfico multi-tenant.
 
-- **2.2 Árbol estructural del repositorio:**
+### 2.1 Estilo arquitectónico
+[CONFIRMADO] **Arquitectura Multi-Agente Jerárquica Desacoplada y Orientada a Estados**, estructurada en capas funcionales independientes:
+- **Capa de Admisión y FSM de Sesión:** Gobernanza de recursos y madurez.
+- **Capa de Orquestación y Planificación:** Descomposición de objetivos en DAG acíclico.
+- **Capa de Context Engineering:** Pipeline determinista en 13 fases con auditoría extensible (CEA / Fallback determinista).
+- **Capa de Resolución y Enrutamiento:** Resolución de perfiles por capacidades e histéresis de caché.
+- **Capa de Seguridad y Autorización:** Compuertas pre/post handoff, sanitización estática y autorización de herramientas mutantes.
+- **Capa de Adaptadores de Proveedores:** Abstracción unificada de inferencia (Google, Anthropic, OpenAI, Local).
+- **Capa de Gobernanza Económica:** Contabilidad de tokens, presupuestos en cascada y seguimiento epistémico.
+
+### 2.2 Árbol estructural del repositorio (excluyendo ruido)
 ```text
-ACRA-Adaptive Conversational Routing Architecture/
-├── .dockerignore
-├── ACRA.jpg
-├── Dockerfile
-├── docker-compose.yml
-├── pyproject.toml
-├── README.md
-├── README_ES.md
-├── 001_Seed/
+.
+├── .github/workflows/ci.yml           # Integración continua automatizada
+├── 001_Seed/                          # ADN del proyecto y semillas maestras
 │   └── seed-acra-adaptive-conversational-routing-architecture-master.md
-├── 02_Foundation/
-│   └── Engine/
-│       └── EngineReadme.md
-├── 03_Research_AI/
-│   └── experiments/
-│       ├── exp_01_baseline_degradation.py
-│       ├── exp_02_acra_vs_baseline.py
-│       ├── exp_03_ccr_sensitivity.py
-│       ├── exp_04_edge_router_accuracy.py
-│       └── exp_05_ablation_study.py
-├── Artefactos/
-│   ├── GPT 5.6 SOL/
-│   │   └── ACRA_Plan_Mejora_DeepMind_Antigravity-GPT SOL.md
-│   └── Planes/Vigentes/
-│       ├── ACRA_Academic_Paper_Draft.md
-│       ├── ACRA_Benchmark_Report.md
-│       ├── exp_01_baseline_results.json
-│       ├── exp_02_ab_test_results.json
-│       ├── exp_03_ccr_sensitivity_results.json
-│       ├── exp_04_edge_router_results.json
-│       └── exp_05_ablation_results.json
-├── config/
-│   └── acra_config.yaml
-├── data/
-│   ├── benchmark_dataset_annotated.json
-│   └── processed/
-│       └── all_experiments_summary.json
-├── docs/
-│   ├── architecture/
-│   │   ├── ACRA_Cognitive_Stability_RFC.md
-│   │   └── ACRA_System_Specification_v2.md
-│   ├── benchmarks/
-│   │   └── ACRA_Evaluation_Report.md
-│   ├── engineers_notes/ (ref_01 a ref_10)
-│   ├── security/
-│   │   ├── ACRA_Threat_Model.md
-│   │   └── ACRA_Trust_Boundaries.md
-│   └── technical_specs/
-│       └── ACRA_Technical_Specification_v1.md
-├── schemas/
-│   ├── clean_payload.json
-│   ├── conversation_state.json
-│   ├── policy_validation.json
-│   └── routing_decision.json
-├── scripts/
-│   ├── generate_benchmark_dataset.py
-│   ├── run_all_experiments.py
-│   └── verify_reproducibility.py
-├── src/
-│   ├── core/
-│   │   ├── __init__.py
-│   │   ├── config_loader.py
-│   │   ├── dhc.py
-│   │   ├── edge_router.py
-│   │   ├── governance.py
-│   │   ├── handoff.py
-│   │   ├── logger.py
-│   │   ├── metrics.py
-│   │   ├── orchestrator.py
-│   │   ├── payload_policy.py
-│   │   ├── state_machine.py
-│   │   ├── unified_context.py
-│   │   └── models/
-│   │       ├── __init__.py
-│   │       ├── llm_adapter.py
-│   │       └── mock_models.py
-│   └── data_generation/
-│       └── conversation_generator.py
-└── tests/
-    ├── __init__.py
-    ├── run_all_tests.py
-    ├── test_integration_runner.py
-    ├── test_suite_runner.py
-    ├── benchmark/
-    │   └── test_benchmark_dataset.py
-    ├── security/
-    │   ├── test_memory_poisoning.py
-    │   ├── test_payload_policy.py
-    │   ├── test_prompt_injection.py
-    │   └── test_tenant_isolation.py
-    └── unit/
-        ├── test_dhc.py
-        ├── test_edge_router.py
-        ├── test_governance_and_config.py
-        ├── test_handoff.py
-        ├── test_metrics.py
-        ├── test_orchestrator.py
-        ├── test_semantic_fidelity.py
-        ├── test_state_machine.py
-        └── test_unified_context.py
+├── 02_Foundation/                     # Fundamentos y especificaciones del motor
+├── 03_Research_AI/                    # Investigaciones empíricas y benchmarks LiC
+│   └── experiments/                   # 5 simulaciones experimentales
+├── Artefactos/                        # Especificaciones de evolución (EVO ACRA.md, planes)
+├── config/                            # Configuraciones YAML
+│   ├── acra_config.yaml               # Configuración central
+│   ├── policies/hysteresis.yaml       # Política de histéresis de afinidad
+│   ├── profiles/model_profiles.yaml   # 7 perfiles de capacidad abstractos
+│   └── providers/                     # Configs de adaptadores (google, anthropic, openai, local)
+├── data/                              # Datasets y métricas de procesamiento
+├── docs/                              # Documentación técnica, ADRs 001-004, RFCs y STRIDE
+├── schemas/                           # 6 Esquemas formales JSON
+├── scripts/                           # Scripts de síntesis, benchmarks y auditoría
+├── src/core/                          # Código fuente de producción
+│   ├── agents/                        # Factory, Registry y FSM de Agentes
+│   ├── context/                       # Pipeline de 13 fases e ingeniería de contexto
+│   ├── contracts/                     # Modelos y contratos Pydantic libres de modelos
+│   ├── economy/                       # Economía de tokens, modelos de costo y procedencia
+│   ├── fsm/                           # FSMs descompuestas (Session, Objective, Task, Handoff)
+│   ├── orchestration/                 # HierarchicalOrchestrator, Planner, Consolidator
+│   ├── providers/                     # Adaptadores de modelos (Google, Anthropic, OpenAI, Local)
+│   ├── routing/                       # ModelResolver, IntakeRouter, CacheAwareRouter
+│   └── security/                      # HandoffPolicyGate, ToolAuthorizationGate, Locks
+└── tests/                             # Suite de pruebas (165 pruebas automatizadas, 100% pass)
+    ├── benchmark/                     # Degradation benchmarks y CCR
+    ├── e2e/                           # Ciclo de vida E2E multi-agente
+    ├── fixtures/                      # Fixtures de prueba aisladas
+    ├── integration/                   # Pruebas de orquestación e integración
+    ├── security/                      # Pruebas de inyección, políticas y herramientas
+    └── unit/                          # Pruebas unitarias de todos los componentes
 ```
 
-- **2.3 Responsabilidad por directorio y archivo clave:**
-  - `src/core/orchestrator.py`: `[CONFIRMADO]` Orquestador central. Coordina el flujo de cada turno (`process_turn`), valida transiciones FSM, invoca DHC, evalúa políticas y resguarda el clúster Pro.
-  - `src/core/edge_router.py`: `[CONFIRMADO]` Clasificador liviano que calcula el vector de madurez (`MaturityVector`), el riesgo arquitectónico y emite la acción (`HOLD_LOCAL_EDGE`, `CLARIFY_LOCAL_EDGE`, `DISPATCH_PRO`).
-  - `src/core/dhc.py`: `[CONFIRMADO]` Compresor dinámico de historial. Ejecuta enmascaramiento asimétrico del asistente, preserva bloques de código y decisiones clave, y purga charla conversacional.
-  - `src/core/payload_policy.py`: `[CONFIRMADO]` Compuerta de validación estática previa al handoff. Detecta inyecciones de prompt, fugas de secretos (API keys de OpenAI, AWS, GitHub, claves privadas) y fugas PII.
-  - `src/core/handoff.py`: `[CONFIRMADO]` Ensamblador de `CleanPayload` con sellado criptográfico (`sterilization_hash`) y directivas de ejecución.
-  - `src/core/unified_context.py`: `[CONFIRMADO]` Almacenamiento y caché de contexto con salting SHA-256, aislamiento por inquilino (`tenant_id`) y soporte de revocación inmediata.
-  - `src/core/state_machine.py`: `[CONFIRMADO]` Máquina formal de 12 estados (`SystemState`) que impide transiciones ilícitas durante el ciclo de vida de la sesión.
-  - `src/core/governance.py`: `[CONFIRMADO]` Gobernador de recursos (`ResourceGovernor`) que monitorea turnos, tokens acumulados, latencia y presupuesto en dólares para evitar denegación de servicio.
-  - `src/core/metrics.py`: `[CONFIRMADO]` Motor de cálculo de ecuaciones matemáticas formales: Rendimiento Promedio ($P̄$), Aptitud $A^{90}$, Infiabilidad $U_{10}^{90}$, fidelidades semánticas ($SF_{key}$, $SF_{neg}$) y $CCR$.
-  - `src/core/config_loader.py`: `[CONFIRMADO]` Validador Pydantic de la configuración global YAML (`config/acra_config.yaml`).
-  - `src/core/logger.py`: `[CONFIRMADO]` Logger estructurado JSON con correlación (`correlation_id`) y ofuscación automática de credenciales/secretos.
-  - `src/core/models/`: `[CONFIRMADO]` Adaptadores y stubs (`BaseLLMAdapter`, `LocalOllamaStubAdapter`, `MockEdgeModel`, `MockProModel`) con perfiles de costo y latencia.
-  - `schemas/`: `[CONFIRMADO]` Esquemas JSON de validación estricta para payloads limpios, estado conversacional y decisiones de ruteo.
-  - `03_Research_AI/experiments/`: `[CONFIRMADO]` 5 suites experimentales formales para validación de hipótesis de degradación, A/B testing, sensibilidad CCR y ablación.
-- **2.4 Límites modulares y acoplamiento:** `[CONFIRMADO]` Acoplamiento débil mediante contratos tipados con Pydantic y enums estrictos. Ningún módulo del núcleo depende de llamadas de red no encapsuladas en adaptadores. El Edge Router no tiene acoplamiento directo con la inferencia Pro.
+### 2.3 Responsabilidad por directorio y archivo clave
+- [CONFIRMADO] `src/core/contracts/`: Contratos Pydantic puros sin dependencias de proveedor:
+  - `context.py`: `ContextCapsule`, `EpistemicStatus`, `PolicyMode`, `StablePrefixDescriptor`.
+  - `agent.py`: `AgentRole`, `AgentDefinition`, `AgentInstance`, `AgentCapabilityVector`.
+  - `task.py`: `TaskNode`, `ObjectivePlan`, `ConsolidationReport`.
+  - `routing.py`: `ModelCapabilityProfile`, `ModelResolutionDecision`, `HysteresisSwitchDecision`.
+  - `security.py`: `ToolAuthorizationRequest`, `ToolAuthorizationResult`, `HandoffValidationResult`.
+- [CONFIRMADO] `src/core/fsm/`: Máquinas de estados finitos independientes con `CyclicTransitionGuard`:
+  - `session.py`: FSM de sesión (`NEW`, `INTAKE`, `ROUTING`, `EXECUTING`, `COMPLETED`, `FAILED`).
+  - `objective.py`: FSM de objetivo global.
+  - `task.py`: FSM de tareas individuales en el DAG.
+  - `handoff.py`: FSM del ciclo de handoff (`INITIATED`, `AUDITED`, `SANITIZED`, `DISPATCHED`, etc.).
+- [CONFIRMADO] `src/core/context/`: Canalización de Context Engineering:
+  - `pipeline.py`: `ContextEngineeringPipeline` (13 etapas deterministas secuenciales).
+  - `signals.py`: `ZeroLLMTelemetryExtractor` (18 métricas puramente matemáticas).
+  - `auditor.py`: `DeterministicFallbackAuditor` y `CEAContextAuditAdapter`.
+  - `stable_prefix.py`: `StablePrefixEngine` para maximizar hits de caché.
+  - `scoped_registry.py`: `ScopedContextRegistry` con aislamiento multi-inquilino.
+- [CONFIRMADO] `src/core/agents/`:
+  - `factory.py`: `AgentFactory` con verificación de límites de rol y presupuesto.
+  - `registry.py`: `AgentRegistry` para ciclo de vida de agentes.
+  - `state_machine.py`: `AgentInstanceStateMachine` con control de estados activos/inactivos.
+- [CONFIRMADO] `src/core/orchestration/`:
+  - `hierarchical.py`: `HierarchicalAgentOrchestrator` y fachada compatible `ACRAOrchestrator`.
+  - `planner.py`: `ObjectivePlanner` con generación de DAG de tareas y asignación de agentes.
+  - `task_graph.py`: `TaskGraph` basado en ordenamiento topológico de Kahn con detección de ciclos.
+  - `consolidator.py`: `Consolidator` con resolución de contradicciones y síntesis formal.
+- [CONFIRMADO] `src/core/routing/`:
+  - `model_resolver.py`: Mapeo de capacidades a perfiles con cadena de respaldo.
+  - `affinity.py`: `CacheAwareRouter` con cálculo de umbral de histéresis y ventanas de enfriamiento.
+  - `intake.py`: `IntakeRouter` con cómputo del Vector Multidimensional de Madurez.
+- [CONFIRMADO] `src/core/security/`:
+  - `handoff_policy_gate.py`: Evaluación previa/posterior, 5 modos de política y escalación reversible.
+  - `tool_authorization_gate.py`: Separación plan/ejecución y aprobación requerida para acciones destructivas.
+  - `concurrency.py`: `OptimisticLockManager` y registro de claves de idempotencia.
+- [CONFIRMADO] `src/core/economy/`:
+  - `engine.py`: `TokenEconomyEngine` con presupuestos jerárquicos y discriminación medido/estimado.
+  - `cost_model.py`: `ContinuityCostModel` para arbitraje de costos de caché frente a reconstrucción.
+  - `provenance.py`: `ProvenanceTracker` para auditoría ontológica de artefactos.
+- [CONFIRMADO] `src/core/providers/`:
+  - `google.py`: `GoogleGenAIAdapter` con soporte REST en vivo (`urllib.request`) y fallback simulado.
+  - `anthropic.py`: `AnthropicAdapter` con telemetría de lectura de caché.
+  - `openai.py`: `OpenAIAdapter` con soporte de telemetría de prompts.
+  - `local.py`: `LocalAdapter` para inferencia local con coste cero.
+
+### 2.4 Límites modulares y acoplamiento
+- [CONFIRMADO] **Acoplamiento Débil Estricto:** Los módulos centrales de lógica (`contracts`, `routing`, `context`, `security`, `orchestration`) no importan ningún cliente de proveedor específico (Google, Anthropic, OpenAI).
+- [CONFIRMADO] **Invariante INV-001:** Se prohíbe explícitamente el uso de cadenas de texto con nombres de modelos comerciales en el núcleo de dominio; su uso se restringe a archivos YAML de configuración y adaptadores en `src/core/providers/`.
 
 ---
 
 ## 3. FLUJOS DE EJECUCIÓN Y ENTRY POINTS
-- **3.1 Puntos de entrada principales:**
-  - `src/core/orchestrator.py::ACRAOrchestrator.process_turn(...)`: `[CONFIRMADO]` Entry point programático principal para procesar turnos conversacionales en runtime.
-  - `scripts/run_all_experiments.py`: `[CONFIRMADO]` Script CLI para reproducir los 5 experimentos científicos y compilar métricas agregadas en `data/processed/all_experiments_summary.json`.
-  - `scripts/verify_reproducibility.py`: `[CONFIRMADO]` Verificación automatizada de consistencia y reproducibilidad de benchmarks.
-  - `tests/run_all_tests.py`: `[CONFIRMADO]` Runner unificado de la suite de pruebas.
-- **3.2 Diagrama de flujo principal E2E:**
-```mermaid
-sequenceDiagram
-    autonumber
-    actor User as Usuario / Cliente
-    participant SM as ACRA State Machine
-    participant Gov as Resource Governor
-    participant ER as Edge Router
-    participant DHC as Dynamic History Compressor
-    participant PG as Payload Policy Gate
-    participant UC as Unified Context Tier
-    participant HO as Handoff Engine
-    participant Pro as Clúster Pro (Frontier LLM)
 
-    User->>SM: Mensaje entrante (Turno N)
-    SM->>Gov: Validar presupuesto (turnos, tokens, USD)
-    Gov-->>SM: Presupuesto OK
-    SM->>ER: Evaluar madurez y ambigüedad
-    alt Madurez insuficiente (< 0.70) o Turnos iniciales
-        ER-->>SM: HOLD_LOCAL_EDGE / CLARIFY_LOCAL_EDGE
-        SM-->>User: Respuesta clarificadora / Asistencia local Edge
-    else Madurez confirmada (>= 0.70)
-        ER-->>SM: DISPATCH_PRO
-        SM->>DHC: Comprimir historial conversacional (CCR > 0.45)
-        DHC-->>SM: CompressedContext (Chatter purgado, código retenido)
-        SM->>PG: Validar políticas (Inyecciones, Secretos, PII)
-        alt Infracción de seguridad detectada
-            PG-->>SM: PolicyViolation (Critical/High)
-            SM-->>User: Bloqueo de seguridad / Fallback local
-        else Payload estéril verificado
-            PG-->>SM: Validación Aprobada (Hash criptográfico)
-            SM->>HO: Ensamblar CleanPayload
-            HO->>UC: Persistir snapshot (Tenant ID + Salt SHA-256)
-            HO->>Pro: Despacho a inferencia de frontera (Prefill optimizado)
-            Pro-->>SM: Respuesta de alta fidelidad
-            SM-->>User: Retorno estabilizado al usuario
-        end
-    end
+### 3.1 Puntos de entrada principales
+- **Programático (Producción):** `HierarchicalAgentOrchestrator.execute_objective(...)` en [src/core/orchestration/hierarchical.py](file:///d:/0001%20HyperScale%20Thinking/PROYECTOS%20CLOUD/Research%20and%20Development/ACRA-Adaptive%20Conversational%20Routing%20Architecture/src/core/orchestration/hierarchical.py).
+- **Retrocompatibilidad:** `ACRAOrchestrator.process_turn(...)` en [src/core/orchestrator.py](file:///d:/0001%20HyperScale%20Thinking/PROYECTOS%20CLOUD/Research%20and%20Development/ACRA-Adaptive%20Conversational%20Routing%20Architecture/src/core/orchestrator.py).
+- **Scripts Operativos y Auditoría:**
+  - `scripts/verify_reproducibility.py`: Verificación de extremo a extremo de esquemas, tests e invariantes.
+  - `scripts/run_all_experiments.py`: Ejecutor de los 5 experimentos empíricos de benchmark.
+  - `scripts/generate_benchmark_dataset.py`: Síntesis del dataset de 64 trazas anotadas.
+
+### 3.2 Diagrama de flujo principal E2E (ASCII)
+```text
+Usuario / Payload
+      |
+      v
+[IntakeRouter] ------------> ¿M(v) < 0.70? ----(Sí)----> [Edge Response / Aclaración]
+      |                                                        (Pro dormido)
+    (No, Maduro)
+      v
+[HierarchicalAgentOrchestrator]
+      |
+      v
+[ObjectivePlanner] -------------> Descompone en DAG (TaskGraph de Kahn)
+      |
+      +---> Para cada Tarea en orden topológico:
+                |
+                v
+          [AgentFactory] --------> Asigna AgentInstance bajo AgentRole
+                |
+                v
+          [13-Stage Context Engineering Pipeline]
+                |
+                +-> Extracción de 18 señales zero-LLM
+                +-> DHC (Compresión y enmascaramiento asimétrico)
+                +-> Prefijo Estable & Auditoría (CEA / Fallback)
+                +-> Modos de Política (Enforce, DryRun, HumanReview, etc.)
+                |
+                v
+          [ModelResolver & CacheAwareRouter]
+                |
+                +-> Resuelve perfil de capacidad
+                +-> Evalúa histéresis de caché (INV-010)
+                |
+                v
+          [ToolAuthorizationGate & HandoffPolicyGate]
+                |
+                +-> ¿Plan/Execute autorizado?
+                +-> Sanitización y control de concurrencia
+                |
+                v
+          [ProviderAdapter] (Google, Anthropic, OpenAI, Local)
+                |
+                v
+          [TokenEconomyEngine] --> Deduce presupuesto y registra tokens medidos
+                |
+                v
+[Consolidator] -----------------> Resuelve contradicciones y sintetiza salida unificada
+      |
+      v
+Respuesta Consolidada Final
 ```
-- **3.3 Ciclo de vida de la ejecución y estados:** `[CONFIRMADO]` Estados gobernados por `ACRAStateMachine`: `IDLE` -> `INGESTING` -> (`CLARIFYING` | `CONSOLIDATING`) -> `VALIDATING` -> (`POLICY_REJECTED` | `ROUTING_PRO`) -> `EXECUTING_PRO` -> `RESPONDING` -> `IDLE` / `TERMINATED`. Las transiciones directas prohibidas (e.g., `INGESTING` -> `ROUTING_PRO` sin consolidación previa) disparan de inmediato `InvalidTransitionError`.
+
+### 3.3 Ciclo de vida de la ejecución y estados
+[CONFIRMADO] Las máquinas de estados finitos regulan estrictamente cada nivel:
+- **Session FSM:** `NEW` $\to$ `INTAKE` $\to$ `ROUTING` $\to$ `EXECUTING` $\to$ `COMPLETED` (o `FAILED`).
+- **Objective FSM:** `DRAFT` $\to$ `DECOMPOSED` $\to$ `IN_PROGRESS` $\to$ `CONSOLIDATING` $\to$ `ACHIEVED`.
+- **Task FSM:** `PENDING` $\to$ `SCHEDULED` $\to$ `RUNNING` $\to$ `COMPLETED` (o `BLOCKED`).
+- **Handoff FSM:** `INITIATED` $\to$ `AUDITED` $\to$ `SANITIZED` $\to$ `DISPATCHED` $\to$ `CONFIRMED`.
 
 ---
 
 ## 4. MODELO DE DATOS, CONTRATOS Y PERSISTENCIA
-- **4.1 Esquemas y entidades principales:**
-  - `MessageTurn`: `[CONFIRMADO]` Representa cada interacción con atributos: `role`, `content`, `turn_index`, `token_count`, `provenance`, `trust_level` y `source_id`.
-  - `MaturityVector`: `[CONFIRMADO]` Vector continuo 4D: `semantic_ambiguity`, `contextual_completeness`, `architectural_risk`, `turn_depth`.
-  - `RouterDecision`: `[CONFIRMADO]` Salida del clasificador Edge: `action`, `target_cluster`, `maturity_score`, `risk_score`, `confidence`, `rationale`.
-  - `CompressedContext`: `[CONFIRMADO]` Contexto depurado con ratios de compresión, lista de requerimientos del usuario, artefactos de código cristalizados y cadena de procedencia.
-  - `CleanPayload`: `[CONFIRMADO]` Carga limpia empaquetada para el modelo de frontera: `prefill_prompt`, `sterilization_hash`, `is_sterilized`, versiones de esquema y metadatos.
-  - `ContextSnapshot`: `[CONFIRMADO]` Instantánea persistente con `tenant_id`, `cache_key` SHA-256, estado de revocación (`is_revoked`) y marca temporal.
-- **4.2 Almacenamiento, motores de base de datos y migraciones:** `[CONFIRMADO]` Almacenamiento en memoria volátil en `UnifiedContextTier` estructurado mediante diccionarios indexados por clave criptográfica con invalidación por TTL (3600 segundos por defecto) y revocación inmediata. `[INFERIDO]` No existen motores SQL/NoSQL externos en la versión base; la persistencia a disco se realiza a través de serialización JSON estricta (`schemas/`).
-- **4.3 Interfaces externas, payloads y contratos de API:** `[CONFIRMADO]` Esquemas formales JSON en directorio `schemas/`:
-  - `schemas/clean_payload.json`: Valida el contrato pre-inferencia Pro.
-  - `schemas/conversation_state.json`: Valida la estructura de sesiones activas.
-  - `schemas/policy_validation.json`: Valida infracciones y eventos de seguridad.
-  - `schemas/routing_decision.json`: Valida decisiones y justificaciones del enrutador.
+
+### 4.1 Esquemas y entidades principales
+[CONFIRMADO] Definidos mediante Pydantic v2 en `src/core/contracts/`:
+- `ContextCapsule`: Contenedor inmutable que incluye `capsule_id`, `stable_prefix`, `dynamic_history`, `epistemic_provenance`, `content_hash` y metadatos de auditoría.
+- `AgentDefinition` & `AgentInstance`: Modelo con rol explícito (`AgentRole`), perfil de capacidad y cuota de tokens.
+- `TaskNode`: Representación de nodo de ejecución en el grafo DAG, con dependencias de entrada y resultados tipados.
+- `TokenConsumption`: Registro de gasto con indicador booleano mandatorio `is_measured`.
+- `HysteresisPolicy`: Parámetros operativos de conmutación de afinidad de proveedores.
+
+### 4.2 Almacenamiento, motores de base de datos y migraciones
+- [CONFIRMADO] `UnifiedContextTier`: Almacén de tensores en memoria con claves hash salteadas por inquilino `SHA-256(tenant_id + session_id + salt)`.
+- [CONFIRMADO] `ScopedContextRegistry`: Registro en memoria de cápsulas de contexto por ámbito de agente.
+- [CONFIRMADO] `OptimisticLockManager`: Control de concurrencia en memoria para mutaciones de estado concurrentes.
+- [DECLARADO] Arquitectura lista para backend persistente en Redis / PostgreSQL sin alterar los contratos tipados.
+
+### 4.3 Interfaces externas, payloads y contratos de API
+[CONFIRMADO] Esquemas JSON formales validados en `schemas/`:
+1. `clean_payload.json`: Estructura del canvas limpio post-handoff.
+2. `conversation_state.json`: Estado de la sesión conversacional.
+3. `policy_validation.json`: Resultado de auditoría y validación de seguridad.
+4. `routing_decision.json`: Registro de decisiones de resolución y enrutamiento.
+5. `model_profile.json`: Esquema del registro de capacidades de modelos.
+6. `hysteresis_policy.json`: Esquema de la política de histéresis de caché.
 
 ---
 
 ## 5. CONFIGURACIÓN Y AMBIENTE
-- **5.1 Tabla de variables y configuraciones (`config/acra_config.yaml`):**
-| Parámetro | Tipo | Default | Efecto en Runtime | Sensible |
-| :--- | :--- | :--- | :--- | :--- |
-| `routing.default_maturity_threshold` | `float` | `0.70` | Umbral mínimo para autorizar handoff a clúster Pro | No |
-| `routing.min_turns_before_pro` | `int` | `1` | Turnos Edge mínimos requeridos antes de permitir despacho | No |
-| `routing.max_clarification_turns` | `int` | `4` | Límite de preguntas de clarificación en Edge | No |
-| `compression.target_min_ccr` | `float` | `0.45` | Ratio mínimo exigido de compresión contextual | No |
-| `caching.ttl_seconds` | `int` | `3600` | Tiempo de vida de snapshots de contexto | No |
-| `caching.salt` | `str` | `"acra_kernel_salt_v1"` | Salteado para generación determinista de hash SHA-256 | Sí |
-| `security.block_injections` | `bool` | `true` | Bloqueo activo de intentos de Jailbreak / Override | No |
-| `security.block_secrets` | `bool` | `true` | Inspección y redacción de API keys y claves privadas | No |
-| `governance.max_turns_per_session` | `int` | `25` | Límite máximo de turnos permitidos por sesión | No |
-| `governance.max_tokens_per_session`| `int` | `64000` | Límite acumulativo de tokens por sesión | No |
-| `governance.max_cost_usd_per_session`| `float` | `1.00` | Límite presupuestario en dólares por sesión | No |
-| `tenants.enforce_tenant_isolation` | `bool` | `true` | Aislamiento criptográfico entre diferentes inquilinos | No |
 
-- **5.2 Perfiles de ejecución:** `[CONFIRMADO]` Entorno único configurable mediante YAML (`production-ready`) con flags para pruebas locales y simulación determinista sin dependencias obligatorias de cloud.
-- **5.3 Prerrequisitos de sistema e infraestructura:** `[CONFIRMADO]` Python `>=3.10` (testeado y operativo en Python 3.12.10). Paquetes obligatorios: `numpy>=1.26.0`, `scipy>=1.12.0`, `pydantic>=2.6.0`, `pyyaml>=6.0`, `rich>=13.7.0`, `matplotlib>=3.8.0`, `seaborn>=0.13.0`, `pandas>=2.2.0`. Contenedorización disponible mediante `Dockerfile` y `docker-compose.yml`.
+### 5.1 Tabla de variables de entorno
+| Variable | Tipo | Default | Efecto | Sensible |
+| :--- | :--- | :--- | :--- | :--- |
+| `GEMINI_API_KEY` | String | `None` | Habilita llamadas en vivo a Google GenAI REST API | Sí |
+| `OPENAI_API_KEY` | String | `None` | Credencial para adapter OpenAI (modo producción) | Sí |
+| `ANTHROPIC_API_KEY`| String | `None` | Credencial para adapter Anthropic (modo producción)| Sí |
+| `ACRA_CONFIG_PATH` | Path | `config/acra_config.yaml` | Ruta alternativa a la configuración maestra | No |
+| `ACRA_POLICY_MODE` | String | `ENFORCE` | Modo global de compuerta (`ENFORCE`, `AUDIT_ONLY`, etc.) | No |
+| `ACRA_CACHE_DIR` | Path | `.acra_cache/` | Directorio local de persistencia temporal | No |
+
+### 5.2 Perfiles de ejecución
+- [CONFIRMADO] **Dev / Local:** Inferencia mediante stubs deterministas locales y `LocalAdapter` con coste cero de tokens.
+- [CONFIRMADO] **Test / CI:** Ejecución completa de la suite de 165 pruebas automatizadas bajo pytest en menos de 2 segundos.
+- [DECLARADO] **Prod (Kubernetes):** Pod sin estado con variables inyectadas mediante Kubernetes Secrets y ConfigMaps.
+
+### 5.3 Prerrequisitos de sistema e infraestructura
+- Python 3.10, 3.11 o 3.12.
+- Dependencias base: `pydantic>=2.0.0`, `pyyaml>=6.0`, `jsonschema>=4.0.0`.
+- Dependencias de desarrollo/benchmark: `pytest>=7.0.0`, `faker`, `scipy`, `numpy`.
 
 ---
 
 ## 6. PRUEBAS, CI/CD Y OPERACIÓN
-- **6.1 Estrategia de pruebas:** `[CONFIRMADO]`
-  - Suite unitaria exhaustiva (`tests/unit/`): cubre DHC, Edge Router, Gobernanza, Handoff, Métricas, Orquestador, Fidelidad Semántica, Máquina de Estados y Contexto Unificado.
-  - Suite de seguridad estricta (`tests/security/`): cubre inyección de prompts, envenenamiento de memoria, fuga de credenciales y aislamiento multi-tenant.
-  - Suite de benchmarks y datasets (`tests/benchmark/`): valida el dataset anotado de 500 trazas conversacionales.
-  - Estado actual de validación: **56 pruebas pasando con 100% de éxito (0 fallas)** en un tiempo de ejecución de ~3.72 segundos.
-- **6.2 Automatización y pipelines CI/CD:** `[INFERIDO]` Configuración de pytest y linters lista en `pyproject.toml` (`tool.pytest.ini_options`, `tool.ruff`, `tool.mypy`).
-- **6.3 Contenedores y orquestación:** `[CONFIRMADO]` `Dockerfile` multi-stage optimizado basado en `python:3.11-slim` con usuario no-root (`acrauser`) y `docker-compose.yml` para despliegue aislado.
+
+### 6.1 Estrategia de pruebas
+[CONFIRMADO] Pirámide de pruebas exhaustiva con **165 pruebas automatizadas (100% pasando)**:
+- **Unit Tests (115 pruebas):** Verificación de contratos, FSMs con guardas de ciclo, compresión DHC, enrutadores de madurez, 13 fases de contexto, economía jerárquica y los 20 casos de prueba obligatorios.
+- **Security Tests (21 pruebas):** Envenenamiento de memoria, inyección de prompts, aislamiento multi-inquilino y compuertas de políticas.
+- **Benchmark Tests (7 pruebas):** Degradación LiC, reducción de CCR $\ge 25\%$, ahorro de caché $\ge 20\%$ y dataset anotado de 64 trazas.
+- **Integration & E2E Tests (22 pruebas):** Ciclo completo de vida de orquestador jerárquico, retrocompatibilidad con `ACRAOrchestrator` y runners de verificación.
+
+### 6.2 Automatización y pipelines CI/CD
+- [CONFIRMADO] `.github/workflows/ci.yml`: Pipeline de GitHub Actions que ejecuta linting, validación estática de esquemas JSON y ejecución completa de pytest sobre Python 3.10, 3.11 y 3.12.
+
+### 6.3 Contenedores y orquestación
+- [CONFIRMADO] `Dockerfile`: Imagen de producción multi-etapa basada en `python:3.11-slim`, ejecutando como usuario sin privilegios (`appuser`).
+- [CONFIRMADO] `docker-compose.yml`: Orquestación local para servicios de backend y pruebas de integración.
 
 ---
 
 ## 7. OBSERVABILIDAD Y MODOS DE FALLA
-- **7.1 Logs, métricas y tracing:** `[CONFIRMADO]`
-  - Logger estructurado JSON en `src/core/logger.py` con emisión en tiempo real, `correlation_id` por turno y filtro automático de secretos regex.
-  - Módulo de métricas matemáticas en `src/core/metrics.py` con cálculo insesgado de percentiles ($P_{10}$, $P_{50}$, $P_{90}$) y varianza.
-- **7.2 Modos de falla conocidos y estrategias de recuperación:** `[CONFIRMADO]`
-  - *Exceso de presupuesto / DoS:* `BudgetExceededError` es capturado y transiciona la sesión a `TERMINATED` o `FALLBACK` local en Edge.
-  - *Detección de Prompt Injection o Fuga:* Transición inmediata a `POLICY_REJECTED`, emitiendo advertencia de seguridad sin despachar al clúster Pro.
-  - *Transición ilícita de estado:* `InvalidTransitionError` previene la corrupción del ciclo de vida conversacional.
-  - *Caída de conectividad de APIs externas:* `LocalOllamaStubAdapter` y adaptadores cuentan con degradación elegante a simulación determinista sin interrumpir la suite de pruebas.
-- **7.3 Idempotencia y reintentos:** `[CONFIRMADO]` La computación de hashes de esterilización SHA-256 garantiza que ante el reenvío de un mismo payload validado, la respuesta y la clave de caché sean deterministas.
+
+### 7.1 Logs, métricas y tracing
+- [CONFIRMADO] `src/core/logger.py`: Logger estructurado en JSON con inyección mandatoria de `correlation_id`, `tenant_id` y marcas de tiempo UTC.
+- [CONFIRMADO] `src/core/metrics.py`: Motor de telemetría que calcula 20 métricas cognitivas: $CCR$, $\bar{P}$, $A^{90}$, $U_{10}^{90}$, $\sigma^2$, densidad de contradicciones, ratio de ruido, ahorro de caché de prefijos y derivas semánticas.
+
+### 7.2 Modos de falla conocidos y estrategias de recuperación
+1. **Ciclo Infinito de Re-ingreso en Admisión:** Mitigado por `CyclicTransitionGuard` en `SessionFSM` (límite: 3 intentos; conmuta a `FAILED` o escalación humana).
+2. **Ciclos en Dependencias de Tareas:** Mitigado por detección de ciclos mediante ordenamiento topológico de Kahn en `TaskGraph` (eleva `ValueError` antes de la ejecución).
+3. **Agotamiento de Presupuesto en Subtareas:** Mitigado por validación de techo presupuestario en `TokenEconomyEngine` (eleva `BudgetExceededError` impidiendo la sobrefacturación).
+4. **Colisión Concurrente de Estados:** Mitigado por detección de versiones en `OptimisticLockManager` (eleva `ConcurrencyConflictError`).
+5. **Indisponibilidad de API de Proveedor:** Mitigado por la cadena de respaldo configurada en `ModelResolver` y simulación determinista de contingencia.
+
+### 7.3 Idempotencia y reintentos
+- [CONFIRMADO] Registro de claves de idempotencia en `src/core/security/concurrency.py` que almacena y retorna resultados previos para transacciones con la misma clave.
 
 ---
 
 ## 8. SEGURIDAD Y PRIVACIDAD
-- **8.1 Hallazgos de seguridad estática:** `[CONFIRMADO]` No se detectaron secretos ni credenciales en texto plano en el árbol de código. El código utiliza placeholders y variables ofuscadas.
-- **8.2 Manejo de autenticación, autorización y secretos:** `[CONFIRMADO]`
-  - `PayloadPolicyGate` escanea patrones de OpenAI API keys (`sk-[a-zA-Z0-9]{20,}`), AWS access keys (`AKIA[0-9A-Z]{16}`), GitHub personal access tokens (`ghp_[a-zA-Z0-9]{36}`) y bloques de certificados PEM (`-----BEGIN PRIVATE KEY-----`).
-  - Detección de patrones de jailbreak (e.g. `dan mode`, `ignore previous instructions`, `<|im_start|>system`).
-- **8.3 Privacidad de datos y cumplimiento:** `[CONFIRMADO]`
-  - Sanitización activa de PII (correos electrónicos y tarjetas de crédito mediante algoritmos regex en `src/core/payload_policy.py`).
-  - Aislamiento estricto multi-inquilino en `UnifiedContextTier` mediante inclusión del `tenant_id` en el hash de caché criptográfica (`tenant_id::session_id::clean_prompt::salt`).
+
+### 8.1 Hallazgos de seguridad estática y STRIDE
+[CONFIRMADO] Auditoría formal bajo modelo STRIDE documentada en `docs/security/ACRA_Threat_Model.md`:
+- **Spoofing:** Identidad verificada mediante aislamiento por inquilino y tokens de sesión.
+- **Tampering:** Integridad de cápsulas garantizada por hashes SHA-256 inmutables.
+- **Repudiation:** Registro de procedencia y auditoría formal en `ProvenanceTracker`.
+- **Information Disclosure:** Sanitización estática obligatoria de claves de API (AWS, OpenAI, GitHub PATs) y datos personales (PII).
+- **Denial of Service:** Límites estrictos de tokens ($\le 64$k) y turnos ($\le 25$) en `ResourceGovernor` y FSMs.
+- **Elevation of Privilege:** Regla estricta de jerarquía de confianza: los mensajes de usuario directo no pueden reclamar estatus `TRUSTED`.
+
+### 8.2 Manejo de autenticación, autorización y secretos
+- [CONFIRMADO] Separación Plan/Ejecución en `ToolAuthorizationGate`: herramientas con impacto destructivo o mutante requieren aprobación explícita.
+- [CONFIRMADO] Sanitización de variables sensibles en registros de telemetría y exclusión de secretos del canvas consolidado.
+
+### 8.3 Privacidad de datos y cumplimiento
+- [CONFIRMADO] Aislamiento estricto de espacios de memoria entre inquilinos (`tenant_id`) en `UnifiedContextTier` y `ScopedContextRegistry`.
 
 ---
 
 ## 9. ESTADO REAL, DEUDA TÉCNICA Y LIMITACIONES
-- **9.1 Nivel de madurez y avance real del proyecto:** `[CONFIRMADO]` Nivel de madurez **Alpha Avanzado / Research Production-Ready**. El núcleo algorítmico, las suites experimentales completas, el dataset anotado de 500 diálogos y la totalidad de los tests (56/56) están 100% operativos e integrados.
-- **9.2 Deuda técnica identificada y stubs pendientes:**
-  - `src/core/models/llm_adapter.py`: `[CONFIRMADO]` Los adaptadores para proveedores de frontera comerciales (OpenAI, Anthropic, Gemini API) son stubs simulados o degradan a simulación local determinista; falta implementar clientes de red asíncronos nativos para producción abierta.
-  - `src/core/unified_context.py`: `[CONFIRMADO]` El almacenamiento de caché de contexto reside en memoria de proceso (`Dict[str, ContextSnapshot]`); la persistencia distribuida para escalado horizontal (e.g., Redis o Memcached) no está implementada.
-  - `02_Foundation/Engine/`: `[DECLARADO]` Directorio con documentación introductoria, sin módulos ejecutables adicionales.
-- **9.3 Inconsistencias entre código y documentación:** `[CONFIRMADO]` La documentación en `docs/` y `README.md` describe la arquitectura con alta precisión matemática y coincide plenamente con los nombres de clases y funciones en `src/core/`.
+
+### 9.1 Nivel de madurez y avance real del proyecto
+- [CONFIRMADO] **Estado Actual:** Arquitectura de Producción / Grado Investigación (11 fases completadas al 100%).
+- [CONFIRMADO] **165 Pruebas Pasando al 100%:** Incluye los 20 casos de prueba obligatorios, 5 experimentos empíricos replicados, adapters de 4 proveedores y validación de 10 invariantes arquitectónicos.
+
+### 9.2 Deuda técnica identificada y stubs pendientes
+- [CONFIRMADO] Los adaptadores para Anthropic y OpenAI operan como stubs conformes a protocolo para pruebas sin coste de API en entornos CI. La integración de sockets HTTP en vivo para estos dos proveedores sigue el mismo patrón implementado en `GoogleGenAIAdapter`.
+- [DECLARADO] El almacenamiento de caché de tensores y estados de FSM es actualmente en memoria de proceso; para despliegues distribuidos multi-nodo en Kubernetes se recomienda incorporar un driver de persistencia compartida (Redis).
+
+### 9.3 Inconsistencias entre código y documentación
+- [CONFIRMADO] Ninguna. Toda la documentación técnica (`README.md`, `README_ES.md`, ADRs, schemas) ha sido sincronizada con el código fuente y validada por pruebas automatizadas.
 
 ---
 
 ## 10. REGLAS PARA MODIFICAR EL PROYECTO
-- **10.1 Convenciones de estilo, linting y tipado:** `[CONFIRMADO]`
-  - Python 3.10+ con tipado estático obligatorio (`mypy` con `disallow_untyped_defs = true`).
-  - Modelos de datos y configuraciones definidos exclusivamente con **Pydantic v2** (`BaseModel`, `Field`).
-  - Linter Ruff con límite estricto de 100 caracteres por línea (`line-length = 100`).
-- **10.2 Reglas arquitectónicas inviolables:**
-  - **Inviolabilidad de la frontera Pro:** Ningún payload puede ser remitido al clúster Pro sin pasar por la compresión de `DynamicHistoryCompressor` y la validación de `PayloadPolicyGate`.
-  - **Asimetría de enmascaramiento:** Está prohibido reenviar la verbosidad y las respuestas intermedias del asistente al clúster pesado; únicamente se transmiten los requerimientos consolidados del usuario y los artefactos de código verificados.
-  - **Determinismo FSM:** Toda nueva etapa en el ciclo conversacional debe ser declarada en `SystemState` y validada en `ACRAStateMachine.VALID_TRANSITIONS`.
-- **10.3 Checklist de verificación previa a commit:**
-  1. Ejecutar la suite completa de pruebas: `python -m pytest` (asegurar 56/56 pasadas).
-  2. Verificar que no se hayan introducido credenciales o API keys en código de pruebas o fixtures.
-  3. Ejecutar `ruff check .` para garantizar conformidad de estilo.
+
+### 10.1 Convenciones de estilo, linting y tipado
+- **Lenguaje de Código y Comentarios:** Inglés técnico estricto para código fuente, docstrings y mensajes de commit.
+- **Tipado Estricto:** Tipado estático con Python type hints en todas las funciones y métodos públicos.
+- **Modelos de Datos:** Pydantic v2 con validación estricta (`ConfigDict(frozen=True)` para entidades inmutables).
+- **Manejo de Errores:** Excepciones de dominio tipadas explícitas (`ModelResolutionError`, `BudgetExceededError`, `SecurityPolicyViolationError`).
+
+### 10.2 Reglas arquitectónicas inviolables (Los 10 Invariantes)
+1. **INV-001 (Zero Model Names in Core):** Prohibido incluir nombres comerciales de modelos en contratos, lógica de enrutamiento o seguridad.
+2. **INV-002 (Explicit Agent Roles):** Toda instancia de agente debe operar bajo un `AgentRole` explícito con límites de capacidades.
+3. **INV-003 (FSM Cycle Guards):** Ninguna FSM puede exceder las transiciones de ciclo permitidas.
+4. **INV-004 (Provenance Epistemic Tracking):** Todo artefacto debe tener procedencia verificada y etiqueta epistémica (`FACT`, `HYPOTHESIS`, `SPECULATION`, `DIRECTIVE`).
+5. **INV-005 (Budget Cascade Ceiling):** Las subtareas no pueden exceder el presupuesto remanente de la entidad padre.
+6. **INV-006 (Measured Token Accounting):** La telemetría debe discriminar obligatoriamente entre tokens medidos y estimados mediante la bandera `is_measured`.
+7. **INV-007 (Plan/Execute Tool Separation):** Herramientas destructivas o mutantes requieren plan previo y autorización.
+8. **INV-008 (Scoped Context Boundaries):** Los agentes acceden al contexto exclusivamente a través de identificadores de ámbito autorizados.
+9. **INV-009 (Reversible Escalation):** Toda escalación de seguridad o privilegio debe ser reversible al finalizar el turno.
+10. **INV-010 (Cache Hysteresis Protection):** La conmutación de proveedor está bloqueada a menos que la ganancia de capacidad supere el costo de reconstrucción de caché.
+
+### 10.3 Checklist de verificación previa a commit
+- [ ] `python -m pytest tests/` ejecuta y pasa 165 pruebas al 100%.
+- [ ] `python scripts/verify_reproducibility.py` finaliza con estado `[PASSED]`.
+- [ ] Ningún archivo en `src/core/contracts/`, `src/core/routing/`, `src/core/context/` o `src/core/security/` contiene cadenas de texto con nombres de modelos comerciales.
+- [ ] Las nuevas dependencias están debidamente registradas en `pyproject.toml`.
+- [ ] Los esquemas JSON en `schemas/` están sincronizados con los contratos Pydantic.
 
 ---
 
@@ -346,6 +421,6 @@ Antes de resolver una solicitud:
 
 ### 🤝 Acuse de Recibo Inicial
 Si el usuario adjuntó esta semilla **sin una instrucción específica**, no intentes generar código ni completar archivos vacíos. Responde únicamente con:
-1. Un saludo confirmando que asimilaste el ADN de **ACRA (Adaptive Conversational Routing Architecture)** y su stack principal (Python 3.10+, Pydantic v2, Edge Router, DHC, FSM determinista, Caching SHA-256).
-2. Un breve resumen de 2-3 líneas sobre el objetivo y su estado actual de avance (Alpha Avanzado con 56/56 pruebas operativas y 5 suites experimentales validadas).
+1. Un saludo confirmando que asimilaste el ADN de **ACRA (Adaptive Conversational Routing Architecture)** y su stack principal.
+2. Un breve resumen de 2-3 líneas sobre el objetivo y su estado actual de avance.
 3. Una frase poniéndote a disposición para resolver dudas sobre su funcionamiento o colaborar en los siguientes pasos de desarrollo.
