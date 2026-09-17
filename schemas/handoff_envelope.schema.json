@@ -1,0 +1,534 @@
+{
+  "$defs": {
+    "AuditHookPoint": {
+      "description": "Defined hook points for context audit in ACRA lifecycle.",
+      "enum": [
+        "INTAKE",
+        "PRE_INFERENCE",
+        "POST_TOOL",
+        "PRE_HANDOFF",
+        "POST_HANDOFF",
+        "POST_CONSOLIDATION",
+        "EVICTION",
+        "MIGRATION"
+      ],
+      "title": "AuditHookPoint",
+      "type": "string"
+    },
+    "AuditResult": {
+      "additionalProperties": false,
+      "description": "Canonical audit output evaluated by ACRA Context Audit Layer.",
+      "properties": {
+        "audit_id": {
+          "description": "Unique audit event identifier",
+          "title": "Audit Id",
+          "type": "string"
+        },
+        "hook_point": {
+          "$ref": "#/$defs/AuditHookPoint",
+          "description": "Lifecycle stage where audit was triggered"
+        },
+        "triple": {
+          "$ref": "#/$defs/AuditTriple",
+          "description": "Primary risk tripleta"
+        },
+        "dimension_scores": {
+          "additionalProperties": {
+            "$ref": "#/$defs/DimensionScore"
+          },
+          "description": "Scores per audited dimension",
+          "title": "Dimension Scores",
+          "type": "object"
+        },
+        "findings": {
+          "description": "Specific findings and defects",
+          "items": {
+            "$ref": "#/$defs/Finding"
+          },
+          "title": "Findings",
+          "type": "array"
+        },
+        "evidence_refs": {
+          "description": "References to substantiated evidence",
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Refs",
+          "type": "array"
+        },
+        "triggered_rules": {
+          "description": "Rules or security heuristics triggered",
+          "items": {
+            "type": "string"
+          },
+          "title": "Triggered Rules",
+          "type": "array"
+        },
+        "limitations": {
+          "description": "Known audit limitations or blindspots",
+          "items": {
+            "type": "string"
+          },
+          "title": "Limitations",
+          "type": "array"
+        },
+        "recommended_actions": {
+          "description": "Suggested orchestrator actions",
+          "items": {
+            "type": "string"
+          },
+          "title": "Recommended Actions",
+          "type": "array"
+        },
+        "requires_policy_approval": {
+          "default": false,
+          "description": "True if human/supervisor sign-off is required",
+          "title": "Requires Policy Approval",
+          "type": "boolean"
+        },
+        "epistemic_status": {
+          "$ref": "#/$defs/EpistemicStatus",
+          "default": "VERIFIED",
+          "description": "Declared status of this audit"
+        }
+      },
+      "required": [
+        "audit_id",
+        "hook_point",
+        "triple"
+      ],
+      "title": "AuditResult",
+      "type": "object"
+    },
+    "AuditTriple": {
+      "additionalProperties": false,
+      "description": "Mandatory audit assessment tripleta.",
+      "properties": {
+        "risk_score": {
+          "description": "Composite risk assessment (0.0 safe, 1.0 critical)",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Risk Score",
+          "type": "number"
+        },
+        "confidence": {
+          "description": "Statistical confidence in assessment (0.0 none, 1.0 full)",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "evidence_coverage": {
+          "description": "Fraction of context substantiated by evidence (0.0 to 1.0)",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Evidence Coverage",
+          "type": "number"
+        }
+      },
+      "required": [
+        "risk_score",
+        "confidence",
+        "evidence_coverage"
+      ],
+      "title": "AuditTriple",
+      "type": "object"
+    },
+    "ContextBudget": {
+      "additionalProperties": false,
+      "description": "Hierarchical resource and context budget.",
+      "properties": {
+        "max_tokens": {
+          "default": 8000,
+          "description": "Maximum total tokens allowed",
+          "minimum": 1,
+          "title": "Max Tokens",
+          "type": "integer"
+        },
+        "max_turns": {
+          "default": 10,
+          "description": "Maximum inference/interaction turns allowed",
+          "minimum": 1,
+          "title": "Max Turns",
+          "type": "integer"
+        },
+        "max_cost_usd": {
+          "default": 0.5,
+          "description": "Maximum cost budget in USD",
+          "minimum": 0.0,
+          "title": "Max Cost Usd",
+          "type": "number"
+        },
+        "max_wall_clock_seconds": {
+          "default": 300,
+          "description": "Timeout in wall-clock seconds",
+          "minimum": 1,
+          "title": "Max Wall Clock Seconds",
+          "type": "integer"
+        },
+        "consumed_tokens": {
+          "default": 0,
+          "description": "Tokens consumed so far",
+          "minimum": 0,
+          "title": "Consumed Tokens",
+          "type": "integer"
+        },
+        "consumed_cost_usd": {
+          "default": 0.0,
+          "description": "Cost accumulated so far in USD",
+          "minimum": 0.0,
+          "title": "Consumed Cost Usd",
+          "type": "number"
+        }
+      },
+      "title": "ContextBudget",
+      "type": "object"
+    },
+    "DimensionScore": {
+      "additionalProperties": false,
+      "description": "Score for a specific audited quality/entropy dimension.",
+      "properties": {
+        "dimension": {
+          "description": "Dimension name (e.g., contamination, verbosity)",
+          "title": "Dimension",
+          "type": "string"
+        },
+        "score": {
+          "description": "Normalized score 0.0 to 1.0",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Score",
+          "type": "number"
+        },
+        "risk_level": {
+          "$ref": "#/$defs/FindingSeverity",
+          "description": "Calculated risk severity for dimension"
+        },
+        "details": {
+          "additionalProperties": true,
+          "description": "Diagnostic metrics",
+          "title": "Details",
+          "type": "object"
+        }
+      },
+      "required": [
+        "dimension",
+        "score",
+        "risk_level"
+      ],
+      "title": "DimensionScore",
+      "type": "object"
+    },
+    "EpistemicStatus": {
+      "description": "Declared epistemic status for audit, telemetry, and provenance artifacts.",
+      "enum": [
+        "VERIFIED",
+        "ESTIMATED",
+        "SELF_REPORTED",
+        "STUB"
+      ],
+      "title": "EpistemicStatus",
+      "type": "string"
+    },
+    "ExecutionEvidence": {
+      "additionalProperties": false,
+      "description": "Cryptographically referenced evidence supporting an agent's claims or actions.",
+      "properties": {
+        "evidence_id": {
+          "description": "Unique identifier for evidence item",
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "tool_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Tool that generated this evidence, if tool-based",
+          "title": "Tool Name"
+        },
+        "input_hash": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Hash of the input data",
+          "title": "Input Hash"
+        },
+        "output_hash": {
+          "description": "SHA-256 or similar content digest of the evidence",
+          "title": "Output Hash",
+          "type": "string"
+        },
+        "summary": {
+          "description": "Concise synopsis of evidence content",
+          "title": "Summary",
+          "type": "string"
+        },
+        "provenance_uri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "URI or path where raw artifact is archived",
+          "title": "Provenance Uri"
+        },
+        "epistemic_status": {
+          "$ref": "#/$defs/EpistemicStatus",
+          "default": "VERIFIED",
+          "description": "Declared epistemic status"
+        }
+      },
+      "required": [
+        "evidence_id",
+        "output_hash",
+        "summary"
+      ],
+      "title": "ExecutionEvidence",
+      "type": "object"
+    },
+    "Finding": {
+      "additionalProperties": false,
+      "description": "An individual finding identified by the audit layer.",
+      "properties": {
+        "finding_id": {
+          "description": "Unique finding identifier",
+          "title": "Finding Id",
+          "type": "string"
+        },
+        "dimension": {
+          "description": "Audited dimension name",
+          "title": "Dimension",
+          "type": "string"
+        },
+        "severity": {
+          "$ref": "#/$defs/FindingSeverity",
+          "description": "Finding severity level"
+        },
+        "message": {
+          "description": "Detailed description of the finding",
+          "title": "Message",
+          "type": "string"
+        },
+        "evidence_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Pointer or hash of supporting evidence",
+          "title": "Evidence Ref"
+        },
+        "remediation_hint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Actionable recommendation",
+          "title": "Remediation Hint"
+        }
+      },
+      "required": [
+        "finding_id",
+        "dimension",
+        "severity",
+        "message"
+      ],
+      "title": "Finding",
+      "type": "object"
+    },
+    "FindingSeverity": {
+      "description": "Severity levels for audit findings.",
+      "enum": [
+        "LOW",
+        "MEDIUM",
+        "HIGH",
+        "CRITICAL"
+      ],
+      "title": "FindingSeverity",
+      "type": "string"
+    },
+    "ToolGrant": {
+      "additionalProperties": false,
+      "description": "Explicit grant authorizing an agent to invoke a specific tool.",
+      "properties": {
+        "tool_name": {
+          "description": "Canonical tool identifier",
+          "title": "Tool Name",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "description": "Human-readable purpose of the tool",
+          "title": "Description",
+          "type": "string"
+        },
+        "is_destructive": {
+          "default": false,
+          "description": "Whether tool performs state mutation or destructive actions",
+          "title": "Is Destructive",
+          "type": "boolean"
+        },
+        "max_invocations_per_task": {
+          "default": 10,
+          "description": "Maximum calls allowed within a task lifecycle",
+          "minimum": 1,
+          "title": "Max Invocations Per Task",
+          "type": "integer"
+        },
+        "allowed_parameters": {
+          "description": "Whitelisted parameter names; empty allows all",
+          "items": {
+            "type": "string"
+          },
+          "title": "Allowed Parameters",
+          "type": "array"
+        },
+        "requires_approval": {
+          "default": false,
+          "description": "Whether invocation requires runtime human/policy confirmation",
+          "title": "Requires Approval",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "tool_name"
+      ],
+      "title": "ToolGrant",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Typed, versioned, audited communication envelope between agents.\n\nEnforces INV-002: Pre-handoff audit is mandatory before dispatch.",
+  "properties": {
+    "envelope_id": {
+      "description": "Unique envelope UUID",
+      "title": "Envelope Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "default": "1.0.0",
+      "description": "Envelope schema version",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_agent_id": {
+      "description": "Originating agent instance ID",
+      "title": "Source Agent Id",
+      "type": "string"
+    },
+    "target_agent_id": {
+      "description": "Receiving agent instance ID",
+      "title": "Target Agent Id",
+      "type": "string"
+    },
+    "domain": {
+      "description": "Target domain boundary",
+      "title": "Domain",
+      "type": "string"
+    },
+    "objective": {
+      "description": "Delegated objective or task summary",
+      "title": "Objective",
+      "type": "string"
+    },
+    "context_capsule_hash": {
+      "description": "Integrity hash of the associated ContextCapsule",
+      "title": "Context Capsule Hash",
+      "type": "string"
+    },
+    "evidence": {
+      "description": "Cryptographic evidence items",
+      "items": {
+        "$ref": "#/$defs/ExecutionEvidence"
+      },
+      "title": "Evidence",
+      "type": "array"
+    },
+    "permissions": {
+      "description": "Delegated tool grants",
+      "items": {
+        "$ref": "#/$defs/ToolGrant"
+      },
+      "title": "Permissions",
+      "type": "array"
+    },
+    "budget": {
+      "$ref": "#/$defs/ContextBudget",
+      "description": "Allocated sub-budget (INV-005)"
+    },
+    "expires_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Handoff validity expiration",
+      "title": "Expires At"
+    },
+    "limitations": {
+      "description": "Known operational limitations or constraints",
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    },
+    "pre_handoff_audit": {
+      "$ref": "#/$defs/AuditResult",
+      "description": "Mandatory audit result (INV-002)"
+    },
+    "audit_status": {
+      "default": "PASSED",
+      "description": "Audit status: PASSED, CONDITIONALLY_PASSED, REJECTED",
+      "title": "Audit Status",
+      "type": "string"
+    },
+    "epistemic_status": {
+      "$ref": "#/$defs/EpistemicStatus",
+      "default": "VERIFIED",
+      "description": "Declared status"
+    }
+  },
+  "required": [
+    "envelope_id",
+    "source_agent_id",
+    "target_agent_id",
+    "domain",
+    "objective",
+    "context_capsule_hash",
+    "budget",
+    "pre_handoff_audit"
+  ],
+  "title": "HandoffEnvelope",
+  "type": "object"
+}

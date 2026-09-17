@@ -1,0 +1,219 @@
+{
+  "$defs": {
+    "StablePrefixDescriptor": {
+      "additionalProperties": false,
+      "description": "Descriptor for prefix caching and prompt stabilization.",
+      "properties": {
+        "prefix_id": {
+          "description": "Unique identifier for stable prefix",
+          "title": "Prefix Id",
+          "type": "string"
+        },
+        "content_hash": {
+          "description": "SHA-256 hash of immutable prefix content",
+          "title": "Content Hash",
+          "type": "string"
+        },
+        "version": {
+          "default": 1,
+          "description": "Monotonically increasing version",
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        },
+        "token_count": {
+          "default": 0,
+          "description": "Token length of prefix",
+          "minimum": 0,
+          "title": "Token Count",
+          "type": "integer"
+        },
+        "system_instruction_hash": {
+          "description": "Hash of system instruction text",
+          "title": "System Instruction Hash",
+          "type": "string"
+        },
+        "tool_manifest_hash": {
+          "description": "Hash of tool schema definitions",
+          "title": "Tool Manifest Hash",
+          "type": "string"
+        },
+        "created_at": {
+          "description": "Creation timestamp",
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "prefix_id",
+        "content_hash",
+        "system_instruction_hash",
+        "tool_manifest_hash"
+      ],
+      "title": "StablePrefixDescriptor",
+      "type": "object"
+    },
+    "ToolResult": {
+      "additionalProperties": false,
+      "description": "Result of a tool execution within an agent turn.",
+      "properties": {
+        "tool_name": {
+          "description": "Name of executed tool",
+          "title": "Tool Name",
+          "type": "string"
+        },
+        "call_id": {
+          "description": "Correlation ID of the tool call",
+          "title": "Call Id",
+          "type": "string"
+        },
+        "status": {
+          "description": "Execution status: SUCCESS, ERROR, TIMEOUT",
+          "title": "Status",
+          "type": "string"
+        },
+        "content": {
+          "description": "Serialized tool output or error message",
+          "title": "Content",
+          "type": "string"
+        },
+        "content_hash": {
+          "description": "Digest of tool response content",
+          "title": "Content Hash",
+          "type": "string"
+        },
+        "execution_time_ms": {
+          "default": 0,
+          "description": "Execution duration in milliseconds",
+          "minimum": 0,
+          "title": "Execution Time Ms",
+          "type": "integer"
+        },
+        "is_stale": {
+          "default": false,
+          "description": "True if output is invalidated by subsequent actions",
+          "title": "Is Stale",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "tool_name",
+        "call_id",
+        "status",
+        "content",
+        "content_hash"
+      ],
+      "title": "ToolResult",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Isolated, scoped context envelope for an agent instance.\n\nGuarantees strict domain isolation (INV-003) and bounded context inheritance (INV-009).",
+  "properties": {
+    "capsule_id": {
+      "description": "Unique capsule UUID",
+      "title": "Capsule Id",
+      "type": "string"
+    },
+    "agent_instance_id": {
+      "description": "Owner agent instance ID",
+      "title": "Agent Instance Id",
+      "type": "string"
+    },
+    "domain": {
+      "description": "Domain boundary (e.g., 'security', 'billing')",
+      "title": "Domain",
+      "type": "string"
+    },
+    "stable_prefix": {
+      "$ref": "#/$defs/StablePrefixDescriptor",
+      "description": "Immutable cached prefix descriptor"
+    },
+    "domain_context": {
+      "default": "",
+      "description": "Domain-specific policies and knowledge",
+      "title": "Domain Context",
+      "type": "string"
+    },
+    "task_context": {
+      "default": "",
+      "description": "Task-specific instructions and goals",
+      "title": "Task Context",
+      "type": "string"
+    },
+    "volatile_tool_state": {
+      "description": "Recent tool results",
+      "items": {
+        "$ref": "#/$defs/ToolResult"
+      },
+      "title": "Volatile Tool State",
+      "type": "array"
+    },
+    "current_turn": {
+      "default": "",
+      "description": "Active user or system prompt for this turn",
+      "title": "Current Turn",
+      "type": "string"
+    },
+    "output_contract": {
+      "default": "json",
+      "description": "Target output schema/format",
+      "title": "Output Contract",
+      "type": "string"
+    },
+    "capsule_hash": {
+      "default": "",
+      "description": "Integrity digest of capsule contents",
+      "title": "Capsule Hash",
+      "type": "string"
+    },
+    "created_at": {
+      "description": "Timestamp created",
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "expires_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "TTL expiration timestamp",
+      "title": "Expires At"
+    },
+    "is_sealed": {
+      "default": false,
+      "description": "Whether capsule is locked against further edits",
+      "title": "Is Sealed",
+      "type": "boolean"
+    },
+    "parent_capsule_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Parent capsule if forked",
+      "title": "Parent Capsule Id"
+    }
+  },
+  "required": [
+    "capsule_id",
+    "agent_instance_id",
+    "domain",
+    "stable_prefix"
+  ],
+  "title": "ContextCapsule",
+  "type": "object"
+}

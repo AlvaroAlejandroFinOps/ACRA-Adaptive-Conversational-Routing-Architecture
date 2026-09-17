@@ -1,0 +1,31 @@
+# ACRA Anthropic Provider Configuration
+# Maps Anthropic provider models to their capability vectors.
+
+provider_id: "anthropic"
+name: "Anthropic Provider"
+is_local: false
+
+models:
+  claude-3-7-sonnet-latest:
+    structured_output: true
+    tool_calling: true
+    long_context: true
+    reasoning: true
+    multimodal: true
+    streaming: true
+    cached_context: true
+    safety_controls: true
+    estimated_cost_per_1k_input: 0.003
+    expected_latency_ms: 950
+
+  claude-3-5-haiku-latest:
+    structured_output: true
+    tool_calling: true
+    long_context: true
+    reasoning: false
+    multimodal: false
+    streaming: true
+    cached_context: true
+    safety_controls: true
+    estimated_cost_per_1k_input: 0.0008
+    expected_latency_ms: 250

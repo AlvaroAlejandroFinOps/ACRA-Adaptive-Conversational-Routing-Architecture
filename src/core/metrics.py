@@ -6,9 +6,13 @@ ACRA Metrics: Implementación formal de las ecuaciones matemáticas del RFC.
 - Context Consolidation Ratio (CCR)
 """
 
+from __future__ import annotations
+
 from typing import Sequence, Dict, Any, List
 import numpy as np
 from pydantic import BaseModel, Field
+
+from src.core.contracts.audit import EpistemicStatus
 
 
 class MetricResult(BaseModel):
@@ -180,3 +184,122 @@ class ACRAMetrics:
             "single_unreliability": m_single.unreliability_p10_p90,
             "multi_unreliability": m_multi.unreliability_p10_p90,
         }
+
+    @staticmethod
+    def evaluate_cognitive_degradation_report(
+        context_risk_score: float = 0.05,
+        evidence_coverage: float = 1.0,
+        context_utilization_ratio: float = 0.85,
+        context_reuse_ratio: float = 0.60,
+        provider_reported_cache_hit_ratio: float = 0.50,
+        estimated_cache_reuse_ratio: float = 0.55,
+        context_rebuild_tokens: int = 0,
+        effective_cost_per_validated_task: float = 0.02,
+        tokens_per_validated_outcome: int = 1200,
+        model_switch_count: int = 0,
+        provider_switch_count: int = 0,
+        avoidable_model_switch_rate: float = 0.0,
+        cache_break_even_accuracy: float = 0.95,
+        context_compaction_regret: float = 0.02,
+        routing_regret: float = 0.01,
+        retry_amplification: float = 1.0,
+        handoff_expansion_ratio: float = 1.05,
+        stale_tool_result_rate: float = 0.0,
+        cross_domain_leakage_rate: float = 0.0,
+        agent_context_contamination_rate: float = 0.0,
+    ) -> CognitiveDegradationReport:
+        """Compute comprehensive 20-metric degradation and quality report tagged with epistemic status (§17)."""
+        return CognitiveDegradationReport(
+            context_risk_score=MetricWithEpistemicStatus(
+                value=float(context_risk_score), epistemic_status=EpistemicStatus.VERIFIED, description="Composite risk from audit layer"
+            ),
+            evidence_coverage=MetricWithEpistemicStatus(
+                value=float(evidence_coverage), epistemic_status=EpistemicStatus.MEASURED, description="Substantiated claim coverage"
+            ),
+            context_utilization_ratio=MetricWithEpistemicStatus(
+                value=float(context_utilization_ratio), epistemic_status=EpistemicStatus.MEASURED, description="Context tokens utilized in reasoning"
+            ),
+            context_reuse_ratio=MetricWithEpistemicStatus(
+                value=float(context_reuse_ratio), epistemic_status=EpistemicStatus.PROVIDER_REPORTED, description="Ratio of reused tokens from cache"
+            ),
+            provider_reported_cache_hit_ratio=MetricWithEpistemicStatus(
+                value=float(provider_reported_cache_hit_ratio), epistemic_status=EpistemicStatus.PROVIDER_REPORTED, description="Direct provider cache hit rate"
+            ),
+            estimated_cache_reuse_ratio=MetricWithEpistemicStatus(
+                value=float(estimated_cache_reuse_ratio), epistemic_status=EpistemicStatus.ESTIMATED, description="Estimated reusable token ratio"
+            ),
+            context_rebuild_tokens=MetricWithEpistemicStatus(
+                value=float(context_rebuild_tokens), epistemic_status=EpistemicStatus.MEASURED, description="Re-ingested tokens due to cache miss"
+            ),
+            effective_cost_per_validated_task=MetricWithEpistemicStatus(
+                value=float(effective_cost_per_validated_task), epistemic_status=EpistemicStatus.MEASURED, description="USD cost per successful task outcome"
+            ),
+            tokens_per_validated_outcome=MetricWithEpistemicStatus(
+                value=float(tokens_per_validated_outcome), epistemic_status=EpistemicStatus.MEASURED, description="Total tokens consumed per outcome"
+            ),
+            model_switch_count=MetricWithEpistemicStatus(
+                value=float(model_switch_count), epistemic_status=EpistemicStatus.MEASURED, description="Count of model transitions"
+            ),
+            provider_switch_count=MetricWithEpistemicStatus(
+                value=float(provider_switch_count), epistemic_status=EpistemicStatus.MEASURED, description="Count of provider handoffs"
+            ),
+            avoidable_model_switch_rate=MetricWithEpistemicStatus(
+                value=float(avoidable_model_switch_rate), epistemic_status=EpistemicStatus.INFERRED, description="Fraction of model switches with negative ROI"
+            ),
+            cache_break_even_accuracy=MetricWithEpistemicStatus(
+                value=float(cache_break_even_accuracy), epistemic_status=EpistemicStatus.ESTIMATED, description="Accuracy threshold needed to justify switch"
+            ),
+            context_compaction_regret=MetricWithEpistemicStatus(
+                value=float(context_compaction_regret), epistemic_status=EpistemicStatus.INFERRED, description="Quality drop due to aggressive compaction"
+            ),
+            routing_regret=MetricWithEpistemicStatus(
+                value=float(routing_regret), epistemic_status=EpistemicStatus.INFERRED, description="Cost differential from sub-optimal routing decisions"
+            ),
+            retry_amplification=MetricWithEpistemicStatus(
+                value=float(retry_amplification), epistemic_status=EpistemicStatus.MEASURED, description="Ratio of total calls to primary task attempts"
+            ),
+            handoff_expansion_ratio=MetricWithEpistemicStatus(
+                value=float(handoff_expansion_ratio), epistemic_status=EpistemicStatus.MEASURED, description="Context size inflation ratio during handoff"
+            ),
+            stale_tool_result_rate=MetricWithEpistemicStatus(
+                value=float(stale_tool_result_rate), epistemic_status=EpistemicStatus.MEASURED, description="Frequency of invalidated tool outputs retained"
+            ),
+            cross_domain_leakage_rate=MetricWithEpistemicStatus(
+                value=float(cross_domain_leakage_rate), epistemic_status=EpistemicStatus.MEASURED, description="Rate of cross-domain context contamination"
+            ),
+            agent_context_contamination_rate=MetricWithEpistemicStatus(
+                value=float(agent_context_contamination_rate), epistemic_status=EpistemicStatus.INFERRED, description="Contamination from volatile parent state"
+            ),
+        )
+
+
+class MetricWithEpistemicStatus(BaseModel):
+    """An individual degradation/quality metric tagged with its epistemic status (INV-004)."""
+    value: float = Field(..., description="Numerical metric value")
+    epistemic_status: EpistemicStatus = Field(..., description="Declared epistemic status (INV-004)")
+    description: str = Field(default="", description="Diagnostic purpose of the metric")
+
+
+class CognitiveDegradationReport(BaseModel):
+    """Comprehensive container for the 20 degradation & quality metrics (§17 EVO ACRA.md)."""
+    context_risk_score: MetricWithEpistemicStatus
+    evidence_coverage: MetricWithEpistemicStatus
+    context_utilization_ratio: MetricWithEpistemicStatus
+    context_reuse_ratio: MetricWithEpistemicStatus
+    provider_reported_cache_hit_ratio: MetricWithEpistemicStatus
+    estimated_cache_reuse_ratio: MetricWithEpistemicStatus
+    context_rebuild_tokens: MetricWithEpistemicStatus
+    effective_cost_per_validated_task: MetricWithEpistemicStatus
+    tokens_per_validated_outcome: MetricWithEpistemicStatus
+    model_switch_count: MetricWithEpistemicStatus
+    provider_switch_count: MetricWithEpistemicStatus
+    avoidable_model_switch_rate: MetricWithEpistemicStatus
+    cache_break_even_accuracy: MetricWithEpistemicStatus
+    context_compaction_regret: MetricWithEpistemicStatus
+    routing_regret: MetricWithEpistemicStatus
+    retry_amplification: MetricWithEpistemicStatus
+    handoff_expansion_ratio: MetricWithEpistemicStatus
+    stale_tool_result_rate: MetricWithEpistemicStatus
+    cross_domain_leakage_rate: MetricWithEpistemicStatus
+    agent_context_contamination_rate: MetricWithEpistemicStatus
+

@@ -1,0 +1,43 @@
+# ACRA Google Provider Configuration
+# Maps Google provider models to their capability vectors.
+
+provider_id: "google"
+name: "Google GenAI Provider"
+is_local: false
+
+models:
+  gemini-2.5-pro:
+    structured_output: true
+    tool_calling: true
+    long_context: true
+    reasoning: true
+    multimodal: true
+    streaming: true
+    cached_context: true
+    safety_controls: true
+    estimated_cost_per_1k_input: 0.00125
+    expected_latency_ms: 800
+
+  gemini-2.5-flash:
+    structured_output: true
+    tool_calling: true
+    long_context: true
+    reasoning: false
+    multimodal: true
+    streaming: true
+    cached_context: true
+    safety_controls: true
+    estimated_cost_per_1k_input: 0.000075
+    expected_latency_ms: 180
+
+  gemini-2.0-flash:
+    structured_output: true
+    tool_calling: true
+    long_context: true
+    reasoning: false
+    multimodal: true
+    streaming: true
+    cached_context: true
+    safety_controls: true
+    estimated_cost_per_1k_input: 0.00010
+    expected_latency_ms: 220

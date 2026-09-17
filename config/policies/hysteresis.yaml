@@ -1,0 +1,14 @@
+# ACRA Cache Hysteresis Policy Configuration (ADR-002, EVO ACRA §9)
+# Enforces INV-010: Cache hysteresis prevents premature model oscillation.
+
+hysteresis:
+  minimum_affinity_turns: 3
+  minimum_affinity_duration_sec: 60.0
+  switch_cooldown_turns: 2
+  minimum_expected_savings_usd: 0.005
+  maximum_model_switches_per_task: 2
+  maximum_provider_switches_per_workflow: 3
+  migration_risk_threshold: 0.60
+  required_capability_delta: 0.20
+  cache_rebuild_break_even_turns: 4
+  emergency_override: true

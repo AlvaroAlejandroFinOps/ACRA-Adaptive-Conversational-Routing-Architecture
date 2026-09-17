@@ -1,0 +1,205 @@
+{
+  "$defs": {
+    "CacheObservabilityLevel": {
+      "description": "Level of observability into provider cache metrics.",
+      "enum": [
+        "FULL_TELEMETRY",
+        "ESTIMATED_PREFIX",
+        "OPAQUE"
+      ],
+      "title": "CacheObservabilityLevel",
+      "type": "string"
+    },
+    "EpistemicStatus": {
+      "description": "Declared epistemic status for audit, telemetry, and provenance artifacts.",
+      "enum": [
+        "VERIFIED",
+        "ESTIMATED",
+        "SELF_REPORTED",
+        "STUB"
+      ],
+      "title": "EpistemicStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Descriptor tracking cache continuity across turns and agent invocations (R-023).",
+  "properties": {
+    "provider_id": {
+      "description": "Active provider ID",
+      "title": "Provider Id",
+      "type": "string"
+    },
+    "model_profile_id": {
+      "description": "Target model profile",
+      "title": "Model Profile Id",
+      "type": "string"
+    },
+    "concrete_model_id": {
+      "description": "Concrete model used",
+      "title": "Concrete Model Id",
+      "type": "string"
+    },
+    "session_id": {
+      "description": "ACRA session ID",
+      "title": "Session Id",
+      "type": "string"
+    },
+    "agent_instance_id": {
+      "description": "Active agent instance ID",
+      "title": "Agent Instance Id",
+      "type": "string"
+    },
+    "cache_reference": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Provider-specific cache key or handle",
+      "title": "Cache Reference"
+    },
+    "cache_scope": {
+      "default": "SESSION",
+      "description": "Scope: SESSION, GLOBAL, TENANT",
+      "title": "Cache Scope",
+      "type": "string"
+    },
+    "cache_created_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "When cache was initialized",
+      "title": "Cache Created At"
+    },
+    "cache_expires_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "When cache will expire",
+      "title": "Cache Expires At"
+    },
+    "reported_cached_tokens": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Provider-reported cache read tokens",
+      "title": "Reported Cached Tokens"
+    },
+    "reported_uncached_tokens": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Provider-reported fresh input tokens",
+      "title": "Reported Uncached Tokens"
+    },
+    "estimated_reusable_tokens": {
+      "default": 0,
+      "description": "Locally estimated reusable prefix tokens",
+      "minimum": 0,
+      "title": "Estimated Reusable Tokens",
+      "type": "integer"
+    },
+    "stable_prefix_hash": {
+      "description": "Hash of active stable prefix",
+      "title": "Stable Prefix Hash",
+      "type": "string"
+    },
+    "system_instruction_hash": {
+      "description": "Hash of active system instruction",
+      "title": "System Instruction Hash",
+      "type": "string"
+    },
+    "tool_manifest_hash": {
+      "description": "Hash of active tool manifest",
+      "title": "Tool Manifest Hash",
+      "type": "string"
+    },
+    "context_capsule_hash": {
+      "description": "Hash of context capsule",
+      "title": "Context Capsule Hash",
+      "type": "string"
+    },
+    "provider_reported_cache_hit": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Provider affirmed cache hit",
+      "title": "Provider Reported Cache Hit"
+    },
+    "observability_level": {
+      "$ref": "#/$defs/CacheObservabilityLevel",
+      "default": "ESTIMATED_PREFIX",
+      "description": "Observability tier for this provider"
+    },
+    "epistemic_status": {
+      "$ref": "#/$defs/EpistemicStatus",
+      "default": "ESTIMATED",
+      "description": "Declared status (INV-004)"
+    },
+    "migration_cost_estimate": {
+      "default": 0.0,
+      "description": "Estimated USD cost to switch model",
+      "minimum": 0.0,
+      "title": "Migration Cost Estimate",
+      "type": "number"
+    },
+    "limitations": {
+      "description": "Known cache telemetry limitations",
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    }
+  },
+  "required": [
+    "provider_id",
+    "model_profile_id",
+    "concrete_model_id",
+    "session_id",
+    "agent_instance_id",
+    "stable_prefix_hash",
+    "system_instruction_hash",
+    "tool_manifest_hash",
+    "context_capsule_hash"
+  ],
+  "title": "CacheContinuityDescriptor",
+  "type": "object"
+}

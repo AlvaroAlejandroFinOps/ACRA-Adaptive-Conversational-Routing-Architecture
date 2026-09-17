@@ -1,0 +1,43 @@
+# ACRA Deterministic Stub Provider Configuration
+# Maps synthetic models to their respective capability vectors.
+
+provider_id: "stub"
+name: "Deterministic Stub Provider"
+is_local: true
+
+models:
+  stub-frontier-v1:
+    structured_output: true
+    tool_calling: true
+    long_context: true
+    reasoning: true
+    multimodal: false
+    streaming: true
+    cached_context: true
+    safety_controls: true
+    estimated_cost_per_1k_input: 0.001
+    expected_latency_ms: 20
+
+  stub-reasoner-v1:
+    structured_output: true
+    tool_calling: false
+    long_context: true
+    reasoning: true
+    multimodal: false
+    streaming: true
+    cached_context: true
+    safety_controls: true
+    estimated_cost_per_1k_input: 0.001
+    expected_latency_ms: 25
+
+  stub-fast-v1:
+    structured_output: true
+    tool_calling: true
+    long_context: false
+    reasoning: false
+    multimodal: false
+    streaming: true
+    cached_context: true
+    safety_controls: true
+    estimated_cost_per_1k_input: 0.0001
+    expected_latency_ms: 10

@@ -1,0 +1,79 @@
+{
+  "additionalProperties": false,
+  "description": "Declarative capability requirements for an agent's role (ADR-002).",
+  "properties": {
+    "profile_id": {
+      "description": "Logical role: 'frontier_planner', 'lightweight_executor', etc.",
+      "title": "Profile Id",
+      "type": "string"
+    },
+    "description": {
+      "default": "",
+      "description": "Purpose and operational context of profile",
+      "title": "Description",
+      "type": "string"
+    },
+    "required_capabilities": {
+      "description": "Required capability flags",
+      "items": {
+        "type": "string"
+      },
+      "title": "Required Capabilities",
+      "type": "array",
+      "uniqueItems": true
+    },
+    "max_context_tokens": {
+      "default": 32000,
+      "description": "Minimum context size needed",
+      "minimum": 1000,
+      "title": "Max Context Tokens",
+      "type": "integer"
+    },
+    "max_cost_per_1k_input": {
+      "default": 0.05,
+      "description": "Maximum acceptable cost per 1k input tokens",
+      "minimum": 0.0,
+      "title": "Max Cost Per 1K Input",
+      "type": "number"
+    },
+    "max_latency_ms": {
+      "default": 5000,
+      "description": "Maximum acceptable latency budget",
+      "minimum": 10,
+      "title": "Max Latency Ms",
+      "type": "integer"
+    },
+    "risk_level_allowed": {
+      "default": "MEDIUM",
+      "description": "Max risk level permitted for this profile",
+      "title": "Risk Level Allowed",
+      "type": "string"
+    },
+    "preferred_provider": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Preferred provider ID if available",
+      "title": "Preferred Provider"
+    },
+    "fallback_providers": {
+      "description": "Ordered list of fallback provider IDs",
+      "items": {
+        "type": "string"
+      },
+      "title": "Fallback Providers",
+      "type": "array"
+    }
+  },
+  "required": [
+    "profile_id"
+  ],
+  "title": "ModelProfile",
+  "type": "object"
+}

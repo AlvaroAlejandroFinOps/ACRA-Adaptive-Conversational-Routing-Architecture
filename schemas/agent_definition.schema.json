@@ -1,0 +1,215 @@
+{
+  "$defs": {
+    "AgentCapability": {
+      "additionalProperties": false,
+      "description": "Functional capability declared by an AgentDefinition.",
+      "properties": {
+        "name": {
+          "description": "Capability name (e.g., 'financial_analysis')",
+          "title": "Name",
+          "type": "string"
+        },
+        "level": {
+          "default": "STANDARD",
+          "description": "Proficiency level: BASIC, STANDARD, EXPERT",
+          "title": "Level",
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "description": "Domain-specific attributes",
+          "title": "Metadata",
+          "type": "object"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "AgentCapability",
+      "type": "object"
+    },
+    "AgentPolicy": {
+      "additionalProperties": false,
+      "description": "Governance constraint or operational rule attached to an AgentDefinition.",
+      "properties": {
+        "policy_id": {
+          "description": "Unique policy identifier",
+          "title": "Policy Id",
+          "type": "string"
+        },
+        "name": {
+          "description": "Human-readable policy name",
+          "title": "Name",
+          "type": "string"
+        },
+        "rule_type": {
+          "description": "Rule category: 'security', 'budget', 'tool', 'domain'",
+          "title": "Rule Type",
+          "type": "string"
+        },
+        "expression": {
+          "description": "Rule logic or constraint expression",
+          "title": "Expression",
+          "type": "string"
+        },
+        "is_mandatory": {
+          "default": true,
+          "description": "Whether rule cannot be bypassed",
+          "title": "Is Mandatory",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "policy_id",
+        "name",
+        "rule_type",
+        "expression"
+      ],
+      "title": "AgentPolicy",
+      "type": "object"
+    },
+    "ToolGrant": {
+      "additionalProperties": false,
+      "description": "Explicit grant authorizing an agent to invoke a specific tool.",
+      "properties": {
+        "tool_name": {
+          "description": "Canonical tool identifier",
+          "title": "Tool Name",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "description": "Human-readable purpose of the tool",
+          "title": "Description",
+          "type": "string"
+        },
+        "is_destructive": {
+          "default": false,
+          "description": "Whether tool performs state mutation or destructive actions",
+          "title": "Is Destructive",
+          "type": "boolean"
+        },
+        "max_invocations_per_task": {
+          "default": 10,
+          "description": "Maximum calls allowed within a task lifecycle",
+          "minimum": 1,
+          "title": "Max Invocations Per Task",
+          "type": "integer"
+        },
+        "allowed_parameters": {
+          "description": "Whitelisted parameter names; empty allows all",
+          "items": {
+            "type": "string"
+          },
+          "title": "Allowed Parameters",
+          "type": "array"
+        },
+        "requires_approval": {
+          "default": false,
+          "description": "Whether invocation requires runtime human/policy confirmation",
+          "title": "Requires Approval",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "tool_name"
+      ],
+      "title": "ToolGrant",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Persistent template defining an agent's role, policies, tools, and domain (ADR-003).",
+  "properties": {
+    "agent_def_id": {
+      "description": "Unique definition ID (e.g., 'def_finance_auditor')",
+      "title": "Agent Def Id",
+      "type": "string"
+    },
+    "name": {
+      "description": "Human-readable agent title",
+      "title": "Name",
+      "type": "string"
+    },
+    "domain": {
+      "description": "Authoritative domain boundary",
+      "title": "Domain",
+      "type": "string"
+    },
+    "description": {
+      "default": "",
+      "description": "Detailed purpose of this agent definition",
+      "title": "Description",
+      "type": "string"
+    },
+    "capabilities": {
+      "description": "Declared capabilities",
+      "items": {
+        "$ref": "#/$defs/AgentCapability"
+      },
+      "title": "Capabilities",
+      "type": "array"
+    },
+    "policies": {
+      "description": "Bound policies and rules",
+      "items": {
+        "$ref": "#/$defs/AgentPolicy"
+      },
+      "title": "Policies",
+      "type": "array"
+    },
+    "tool_grants": {
+      "description": "Whitelisted tools (INV-007)",
+      "items": {
+        "$ref": "#/$defs/ToolGrant"
+      },
+      "title": "Tool Grants",
+      "type": "array"
+    },
+    "input_contract": {
+      "default": "json",
+      "description": "Expected input schema reference",
+      "title": "Input Contract",
+      "type": "string"
+    },
+    "output_contract": {
+      "default": "json",
+      "description": "Enforced output schema reference",
+      "title": "Output Contract",
+      "type": "string"
+    },
+    "model_profile_id": {
+      "default": "domain_planner",
+      "description": "Target ModelProfile ID",
+      "title": "Model Profile Id",
+      "type": "string"
+    },
+    "escalation_policy_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Bound EscalationPolicy ID",
+      "title": "Escalation Policy Id"
+    },
+    "max_context_tokens": {
+      "default": 16000,
+      "description": "Max context ceiling",
+      "minimum": 500,
+      "title": "Max Context Tokens",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "agent_def_id",
+    "name",
+    "domain"
+  ],
+  "title": "AgentDefinition",
+  "type": "object"
+}

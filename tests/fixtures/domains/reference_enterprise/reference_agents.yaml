@@ -1,0 +1,94 @@
+# Reference Synthetic Enterprise Multi-Agent Scenario Fixture (UD-003)
+# Strictly maintained in tests/fixtures to ensure zero domain contamination of core logic.
+
+agents:
+  - agent_def_id: "def_triage_coordinator"
+    name: "Enterprise Triage Coordinator"
+    domain: "triage"
+    description: "Evaluates incident scope, routes subtasks to specialized gerencias, and constructs initial DAG."
+    capabilities:
+      - name: "incident_triage"
+        level: "EXPERT"
+      - name: "scope_decomposition"
+        level: "EXPERT"
+    tool_grants:
+      - tool_name: "inspect_incident_payload"
+        description: "Parse incoming objective and extract service identifiers"
+        is_destructive: false
+        max_invocations_per_task: 5
+        allowed_parameters: ["payload_id", "filter"]
+      - tool_name: "lookup_customer_sla"
+        description: "Query enterprise tier and response SLA"
+        is_destructive: false
+        max_invocations_per_task: 3
+    input_contract: "json"
+    output_contract: "json"
+    model_profile_id: "domain_planner"
+    max_context_tokens: 8000
+
+  - agent_def_id: "def_billing_specialist"
+    name: "Financial & Billing Specialist"
+    domain: "billing"
+    description: "Reconciles invoices, evaluates service credits, and computes contract adjustments."
+    capabilities:
+      - name: "invoice_reconciliation"
+        level: "EXPERT"
+      - name: "dispute_resolution"
+        level: "STANDARD"
+    tool_grants:
+      - tool_name: "query_billing_ledger"
+        description: "Retrieve transaction entries and invoice statements"
+        is_destructive: false
+        max_invocations_per_task: 10
+        allowed_parameters: ["account_id", "statement_period"]
+      - tool_name: "calculate_credit_adjustment"
+        description: "Compute pro-rated SLA breach compensation"
+        is_destructive: false
+        max_invocations_per_task: 5
+    input_contract: "json"
+    output_contract: "json"
+    model_profile_id: "fast_executor"
+    max_context_tokens: 8000
+
+  - agent_def_id: "def_infrastructure_engineer"
+    name: "Platform Infrastructure Specialist"
+    domain: "infrastructure"
+    description: "Diagnoses container clusters, investigates latency spikes, and checks platform telemetry."
+    capabilities:
+      - name: "kubernetes_diagnostics"
+        level: "EXPERT"
+      - name: "telemetry_root_cause"
+        level: "EXPERT"
+    tool_grants:
+      - tool_name: "query_telemetry_metrics"
+        description: "Fetch CPU, memory, and error rates from metrics backend"
+        is_destructive: false
+        max_invocations_per_task: 10
+      - tool_name: "restart_unhealthy_pod"
+        description: "Execute container restart on failing microservice pod"
+        is_destructive: true
+        requires_approval: true
+        max_invocations_per_task: 2
+    input_contract: "json"
+    output_contract: "json"
+    model_profile_id: "deep_reasoner"
+    max_context_tokens: 16000
+
+  - agent_def_id: "def_resolution_consolidator"
+    name: "Executive Resolution Consolidator"
+    domain: "orchestration"
+    description: "Synthesizes multi-domain outcomes into single client-facing resolution with full audit trail."
+    capabilities:
+      - name: "outcome_synthesis"
+        level: "EXPERT"
+      - name: "provenance_verification"
+        level: "EXPERT"
+    tool_grants:
+      - tool_name: "generate_resolution_report"
+        description: "Format executive incident synopsis"
+        is_destructive: false
+        max_invocations_per_task: 3
+    input_contract: "json"
+    output_contract: "json"
+    model_profile_id: "domain_planner"
+    max_context_tokens: 12000

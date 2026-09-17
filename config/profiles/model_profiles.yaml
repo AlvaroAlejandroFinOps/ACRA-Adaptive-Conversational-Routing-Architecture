@@ -1,0 +1,104 @@
+# ACRA Model Profiles Specification (ADR-002)
+# Declares functional capability requirements for agent roles.
+# Core domain code references profile_id only, never concrete model names (INV-001).
+
+version: "1.0.0"
+
+profiles:
+  frontier_planner:
+    profile_id: "frontier_planner"
+    description: "Frontier model for global decomposition, strategy synthesis, and high-complexity task graph creation"
+    required_capabilities:
+      - "structured_output"
+      - "tool_calling"
+      - "reasoning"
+      - "long_context"
+    max_context_tokens: 128000
+    max_cost_per_1k_input: 0.05
+    max_latency_ms: 10000
+    risk_level_allowed: "HIGH"
+    preferred_provider: "stub"
+    fallback_providers:
+      - "stub"
+
+  complex_reasoner:
+    profile_id: "complex_reasoner"
+    description: "High-depth reasoning model for auditing, complex mathematics, and multi-agent consolidation"
+    required_capabilities:
+      - "structured_output"
+      - "reasoning"
+    max_context_tokens: 64000
+    max_cost_per_1k_input: 0.03
+    max_latency_ms: 8000
+    risk_level_allowed: "MEDIUM"
+    preferred_provider: "stub"
+    fallback_providers:
+      - "stub"
+
+  domain_planner:
+    profile_id: "domain_planner"
+    description: "Domain-level specialist planner coordinating sub-agent workflows"
+    required_capabilities:
+      - "structured_output"
+      - "tool_calling"
+    max_context_tokens: 32000
+    max_cost_per_1k_input: 0.01
+    max_latency_ms: 4000
+    risk_level_allowed: "MEDIUM"
+    preferred_provider: "stub"
+    fallback_providers:
+      - "stub"
+
+  lightweight_executor:
+    profile_id: "lightweight_executor"
+    description: "Fast, cost-effective executor for routine tool invocations and task leaf execution"
+    required_capabilities:
+      - "structured_output"
+      - "tool_calling"
+    max_context_tokens: 16000
+    max_cost_per_1k_input: 0.002
+    max_latency_ms: 1500
+    risk_level_allowed: "LOW"
+    preferred_provider: "stub"
+    fallback_providers:
+      - "stub"
+
+  classifier:
+    profile_id: "classifier"
+    description: "Ultra-fast classifier for intake triage and domain routing"
+    required_capabilities:
+      - "structured_output"
+    max_context_tokens: 8000
+    max_cost_per_1k_input: 0.001
+    max_latency_ms: 500
+    risk_level_allowed: "LOW"
+    preferred_provider: "stub"
+    fallback_providers:
+      - "stub"
+
+  validator:
+    profile_id: "validator"
+    description: "Guardrail validator enforcing schema integrity, safety policies, and secret scrubbing"
+    required_capabilities:
+      - "structured_output"
+      - "safety_controls"
+    max_context_tokens: 8000
+    max_cost_per_1k_input: 0.002
+    max_latency_ms: 800
+    risk_level_allowed: "HIGH"
+    preferred_provider: "stub"
+    fallback_providers:
+      - "stub"
+
+  fallback_local:
+    profile_id: "fallback_local"
+    description: "Zero-cost local model for emergency fallback and offline resilience"
+    required_capabilities:
+      - "structured_output"
+    max_context_tokens: 8000
+    max_cost_per_1k_input: 0.0001
+    max_latency_ms: 12000
+    risk_level_allowed: "MEDIUM"
+    preferred_provider: "stub"
+    fallback_providers:
+      - "stub"

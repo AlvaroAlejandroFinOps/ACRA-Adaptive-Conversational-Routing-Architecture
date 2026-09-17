@@ -40,12 +40,16 @@ class OrchestrationResult(BaseModel):
 
 
 from .governance import ResourceGovernor, BudgetExceededError
+from .orchestration.hierarchical_orchestrator import HierarchicalAgentOrchestrator
+from .contracts.outcome import ConsolidatedOutcome
+from .contracts.context import ContextBudget
 
 
 class ACRAOrchestrator:
     """
     Máquina de estados orquestadora de ACRA.
     Intercepta el flujo multi-turno, resguarda el clúster Pro y entrega estabilización cognitiva.
+    Evolucionada para delegar flujos agénticos jerárquicos a HierarchicalAgentOrchestrator.
     """
 
     def __init__(
@@ -55,13 +59,30 @@ class ACRAOrchestrator:
         context_tier: Optional[UnifiedContextTier] = None,
         handoff_engine: Optional[HandoffEngine] = None,
         governor: Optional[ResourceGovernor] = None,
+        hierarchical_orchestrator: Optional[HierarchicalAgentOrchestrator] = None,
     ):
         self.router = edge_router or EdgeRouter()
         self.compressor = compressor or DynamicHistoryCompressor()
         self.context_tier = context_tier or UnifiedContextTier()
         self.handoff = handoff_engine or HandoffEngine()
         self.governor = governor or ResourceGovernor()
+        self.hierarchical = hierarchical_orchestrator or HierarchicalAgentOrchestrator()
         self.conversations: Dict[str, List[MessageTurn]] = {}
+
+    def execute_objective(
+        self,
+        objective_text: str,
+        session_id: Optional[str] = None,
+        parent_budget: Optional[ContextBudget] = None,
+    ) -> ConsolidatedOutcome:
+        """
+        Ejecuta un objetivo de alto nivel a través del orquestador jerárquico de agentes.
+        """
+        return self.hierarchical.execute_objective(
+            objective_text=objective_text,
+            session_id=session_id,
+            parent_budget=parent_budget,
+        )
 
     def process_turn(
         self,

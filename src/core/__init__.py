@@ -12,6 +12,7 @@ from .dhc import DynamicHistoryCompressor, CompressedContext
 from .unified_context import UnifiedContextTier, ContextSnapshot
 from .handoff import HandoffEngine, CleanPayload
 from .orchestrator import ACRAOrchestrator, OrchestratorState
+from .orchestration.hierarchical_orchestrator import HierarchicalAgentOrchestrator
 
 __all__ = [
     "ACRAMetrics",
@@ -26,4 +27,5 @@ __all__ = [
     "CleanPayload",
     "ACRAOrchestrator",
     "OrchestratorState",
+    "HierarchicalAgentOrchestrator",
 ]
