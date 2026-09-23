@@ -14,11 +14,11 @@ if str(ROOT_DIR) not in sys.path:
 
 import importlib
 
-exp01_mod = importlib.import_module("03_Research_AI.experiments.exp_01_baseline_degradation")
-exp02_mod = importlib.import_module("03_Research_AI.experiments.exp_02_acra_vs_baseline")
-exp03_mod = importlib.import_module("03_Research_AI.experiments.exp_03_ccr_sensitivity")
-exp04_mod = importlib.import_module("03_Research_AI.experiments.exp_04_edge_router_accuracy")
-exp05_mod = importlib.import_module("03_Research_AI.experiments.exp_05_ablation_study")
+exp01_mod = importlib.import_module("03_research.experiments.exp_01_baseline_degradation")
+exp02_mod = importlib.import_module("03_research.experiments.exp_02_acra_vs_baseline")
+exp03_mod = importlib.import_module("03_research.experiments.exp_03_ccr_sensitivity")
+exp04_mod = importlib.import_module("03_research.experiments.exp_04_edge_router_accuracy")
+exp05_mod = importlib.import_module("03_research.experiments.exp_05_ablation_study")
 
 run_experiment_1 = exp01_mod.run_experiment_1
 run_experiment_2 = exp02_mod.run_experiment_2

@@ -183,16 +183,16 @@ $$\mathcal{E} \in \{\text{FACT}, \text{HYPOTHESIS}, \text{SPECULATION}, \text{DI
 ├── 001_Seed/                          # Project DNA and master architectural seeds
 │   └── seed-acra-adaptive-conversational-routing-architecture-master.md
 ├── 02_Foundation/                     # Foundational engine specifications
-├── 03_Research_AI/                    # Empirical research and benchmark simulations
+├── 03_research/                    # Empirical research and benchmark simulations
 │   └── experiments/
 │       ├── exp_01_baseline_degradation.py   # Baseline multi-turn decay simulation
 │       ├── exp_02_acra_vs_baseline.py       # A/B evaluation: Raw vs. ACRA pipeline
 │       ├── exp_03_ccr_sensitivity.py        # CCR parameter sensitivity analysis
 │       ├── exp_04_edge_router_accuracy.py   # Maturity classification & sticking prevention
 │       └── exp_05_ablation_study.py         # Component ablation study (5 configurations)
-├── Artefactos/                        # Architectural evolution and implementation plans
-│   ├── GPT 5.6 SOL/EVO ACRA.md        # Reference specification for hierarchical evolution
-│   └── Planes/Vigentes/               # Approved implementation plans and ADR matrices
+├── artifacts/                        # Architectural evolution, specs, and implementation plans
+│   ├── specs/EVO ACRA.md              # Reference specification for hierarchical evolution
+│   └── plans/active/                  # Approved active implementation plans
 ├── config/
 │   ├── acra_config.yaml               # Master ACRA configuration
 │   ├── policies/hysteresis.yaml       # Cache hysteresis & provider affinity switching policies

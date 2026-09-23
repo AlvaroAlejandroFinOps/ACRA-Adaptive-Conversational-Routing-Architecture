@@ -183,16 +183,16 @@ $$\mathcal{E} \in \{\text{FACT}, \text{HYPOTHESIS}, \text{SPECULATION}, \text{DI
 ├── 001_Seed/                          # ADN del proyecto y semillas arquitectónicas maestras
 │   └── seed-acra-adaptive-conversational-routing-architecture-master.md
 ├── 02_Foundation/                     # Especificaciones fundacionales del motor
-├── 03_Research_AI/                    # Investigaciones empíricas y simulaciones de benchmark
+├── 03_research/                    # Investigaciones empíricas y simulaciones de benchmark
 │   └── experiments/
 │       ├── exp_01_baseline_degradation.py   # Simulación de degradación en diálogo crudo
 │       ├── exp_02_acra_vs_baseline.py       # Evaluación A/B: Control vs. ACRA
 │       ├── exp_03_ccr_sensitivity.py        # Análisis de sensibilidad de CCR
 │       ├── exp_04_edge_router_accuracy.py   # Clasificación de madurez y prevención de sticking
 │       └── exp_05_ablation_study.py         # Estudio de ablación (5 configuraciones)
-├── Artefactos/                        # Evolución arquitectónica y planes ejecutados
-│   ├── GPT 5.6 SOL/EVO ACRA.md        # Especificación canónica de evolución jerárquica
-│   └── Planes/Vigentes/               # Planes de implementación aprobados y matrices ADR
+├── artifacts/                        # Evolución arquitectónica, especificaciones y planes
+│   ├── specs/EVO ACRA.md              # Especificación canónica de evolución jerárquica
+│   └── plans/active/                  # Planes de implementación activos aprobados
 ├── config/
 │   ├── acra_config.yaml               # Configuración maestra de ACRA
 │   ├── policies/hysteresis.yaml       # Políticas de histéresis de caché y afinidad de proveedores

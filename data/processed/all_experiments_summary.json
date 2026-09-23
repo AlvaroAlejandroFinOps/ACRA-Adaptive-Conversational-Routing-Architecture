@@ -1,6 +1,6 @@
 {
-  "timestamp_epoch": 1789625945.4173477,
-  "total_duration_sec": 0.15,
+  "timestamp_epoch": 1790123675.7518897,
+  "total_duration_sec": 0.16,
   "simulated": true,
   "framework": "ACRA Adaptive Conversational Routing Architecture v2.0",
   "experiments": {
@@ -9,52 +9,52 @@
       "simulated": true,
       "results": {
         "1": {
-          "mean_P": 63.89,
-          "aptitude_A90": 73.86,
-          "unreliability_U10_90": 22.18,
-          "std_dev": 8.08
+          "mean_P": 63.73,
+          "aptitude_A90": 71.89,
+          "unreliability_U10_90": 16.89,
+          "std_dev": 6.95
         },
         "2": {
-          "mean_P": 60.74,
-          "aptitude_A90": 73.08,
-          "unreliability_U10_90": 24.38,
-          "std_dev": 8.73
+          "mean_P": 61.63,
+          "aptitude_A90": 72.44,
+          "unreliability_U10_90": 22.59,
+          "std_dev": 9.34
         },
         "3": {
-          "mean_P": 56.68,
-          "aptitude_A90": 71.03,
-          "unreliability_U10_90": 30.09,
-          "std_dev": 11.16
+          "mean_P": 56.55,
+          "aptitude_A90": 69.75,
+          "unreliability_U10_90": 26.6,
+          "std_dev": 10.6
         },
         "4": {
-          "mean_P": 53.3,
-          "aptitude_A90": 68.09,
-          "unreliability_U10_90": 29.64,
-          "std_dev": 13.47
+          "mean_P": 52.38,
+          "aptitude_A90": 67.41,
+          "unreliability_U10_90": 30.13,
+          "std_dev": 12.48
         },
         "5": {
-          "mean_P": 49.41,
-          "aptitude_A90": 64.55,
-          "unreliability_U10_90": 32.63,
-          "std_dev": 12.83
+          "mean_P": 49.55,
+          "aptitude_A90": 69.59,
+          "unreliability_U10_90": 39.58,
+          "std_dev": 14.95
         },
         "6": {
-          "mean_P": 45.08,
-          "aptitude_A90": 62.78,
-          "unreliability_U10_90": 36.11,
-          "std_dev": 13.99
+          "mean_P": 46.07,
+          "aptitude_A90": 66.72,
+          "unreliability_U10_90": 41.79,
+          "std_dev": 16.41
         },
         "7": {
-          "mean_P": 43.57,
-          "aptitude_A90": 63.18,
-          "unreliability_U10_90": 41.95,
-          "std_dev": 17.3
+          "mean_P": 41.71,
+          "aptitude_A90": 60.64,
+          "unreliability_U10_90": 35.01,
+          "std_dev": 14.44
         },
         "8": {
-          "mean_P": 42.17,
-          "aptitude_A90": 64.6,
-          "unreliability_U10_90": 42.63,
-          "std_dev": 16.95
+          "mean_P": 40.56,
+          "aptitude_A90": 63.91,
+          "unreliability_U10_90": 45.38,
+          "std_dev": 18.18
         }
       }
     },

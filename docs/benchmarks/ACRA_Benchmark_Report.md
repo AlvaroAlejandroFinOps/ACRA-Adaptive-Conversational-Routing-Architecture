@@ -26,8 +26,8 @@ El banco de pruebas ejecutó cinco protocolos experimentales sistemáticos basad
 ## 2. Artefactos de Datos Generados
 
 Los datos completos en formato JSON reproducible se encuentran disponibles en:
-- [exp_01_baseline_results.json](file:///d:/0001%20HyperScale%20Thinking/PROYECTOS%20CLOUD/DeepMind/ACRA-Adaptive%20Conversational%20Routing%20Architecture/Artefactos/Planes/Vigentes/exp_01_baseline_results.json)
-- [exp_02_ab_test_results.json](file:///d:/0001%20HyperScale%20Thinking/PROYECTOS%20CLOUD/DeepMind/ACRA-Adaptive%20Conversational%20Routing%20Architecture/Artefactos/Planes/Vigentes/exp_02_ab_test_results.json)
-- [exp_03_ccr_sensitivity_results.json](file:///d:/0001%20HyperScale%20Thinking/PROYECTOS%20CLOUD/DeepMind/ACRA-Adaptive%20Conversational%20Routing%20Architecture/Artefactos/Planes/Vigentes/exp_03_ccr_sensitivity_results.json)
-- [exp_04_edge_router_results.json](file:///d:/0001%20HyperScale%20Thinking/PROYECTOS%20CLOUD/DeepMind/ACRA-Adaptive%20Conversational%20Routing%20Architecture/Artefactos/Planes/Vigentes/exp_04_edge_router_results.json)
-- [exp_05_ablation_results.json](file:///d:/0001%20HyperScale%20Thinking/PROYECTOS%20CLOUD/DeepMind/ACRA-Adaptive%20Conversational%20Routing%20Architecture/Artefactos/Planes/Vigentes/exp_05_ablation_results.json)
+- [exp_01_baseline_results.json](file:///d:/0001%20HyperScale%20Thinking/PROYECTOS%20CLOUD/Research%20and%20Development/ACRA-Adaptive%20Conversational%20Routing%20Architecture/03_research/experiments/results/exp_01_baseline_results.json)
+- [exp_02_ab_test_results.json](file:///d:/0001%20HyperScale%20Thinking/PROYECTOS%20CLOUD/Research%20and%20Development/ACRA-Adaptive%20Conversational%20Routing%20Architecture/03_research/experiments/results/exp_02_ab_test_results.json)
+- [exp_03_ccr_sensitivity_results.json](file:///d:/0001%20HyperScale%20Thinking/PROYECTOS%20CLOUD/Research%20and%20Development/ACRA-Adaptive%20Conversational%20Routing%20Architecture/03_research/experiments/results/exp_03_ccr_sensitivity_results.json)
+- [exp_04_edge_router_results.json](file:///d:/0001%20HyperScale%20Thinking/PROYECTOS%20CLOUD/Research%20and%20Development/ACRA-Adaptive%20Conversational%20Routing%20Architecture/03_research/experiments/results/exp_04_edge_router_results.json)
+- [exp_05_ablation_results.json](file:///d:/0001%20HyperScale%20Thinking/PROYECTOS%20CLOUD/Research%20and%20Development/ACRA-Adaptive%20Conversational%20Routing%20Architecture/03_research/experiments/results/exp_05_ablation_results.json)

@@ -9,15 +9,15 @@ Estructura modular híbrida optimizada para Multi-Cloud (GCP, AWS, Azure, Fabric
 
 * **`001_Seed/`**: Seed (Semilla de proyecto y contexto primario para agentes de IA y arquitectos).
 * **`02_Foundation/Engine/`**: Núcleo del framework de automatización del proyecto. Contiene la lógica de ruteo, indexación y EngineReadme.md de gobernanza.
-* **`03_Research_AI/Notebooks/`**: Notebooks de desarrollo interactivo y experimentación (Jupyter/Fabric/Databricks/Colab) para análisis exploratorio (EDA) y algoritmos.
-* **`03_Research_AI/llm_prompts/`**: Estructuras de prompts para LLMs, system prompts, árboles de contexto y plantillas de inferencia generativa.
-* **`03_Research_AI/experiments/`**: Espacio de pruebas de concepto (PoCs), prototipos de modelos, I+D y benchmarks algorítmicos.
+* **`03_research/notebooks/`**: Notebooks de desarrollo interactivo y experimentación (Jupyter/Fabric/Databricks/Colab) para análisis exploratorio (EDA) y algoritmos.
+* **`03_research/prompts/`**: Estructuras de prompts para LLMs, system prompts, árboles de contexto y plantillas de inferencia generativa.
+* **`03_research/experiments/`**: Espacio de pruebas de concepto (PoCs), prototipos de modelos, I+D y benchmarks algorítmicos.
 * **`src/cloud_jobs/`**: Scripts productivos, definiciones de pipelines y orquestación multi-cloud (Fabric PySpark, AWS Glue/EMR, GCP Dataproc/Dataflow, Azure Synapse).
 * **`src/data_generation/`**: Módulos de generación y simulación de datos sintéticos. Rigor matemático en distribuciones y volumetría estadística para pruebas de carga.
 * **`src/core/`**: Lógica de negocio transversal, servicios modulares, utilitarios de backend y componentes de desarrollo de software.
 * **`src/dashboards/`**: Aplicaciones de visualización, tableros de BI, cuadros de mando interactivos (Streamlit, Dash, PowerBI, Looker).
-* **`Artefactos/Planes/Vigentes/`**: Planes de capacidad activos (F-SKUs), presupuestos de cómputo cloud vigentes, hitos del proyecto y documentación activa.
-* **`Artefactos/Planes/Historico_Obsoletos/`**: Histórico de planes evaluados, arquitecturas descartadas y documentación obsoleta preservada como respaldo y trazabilidad.
+* **`artifacts/plans/active/`**: Planes de capacidad activos (F-SKUs), presupuestos de cómputo cloud vigentes, hitos del proyecto y documentación activa.
+* **`artifacts/plans/archive/`**: Histórico de planes evaluados, arquitecturas descartadas y documentación obsoleta preservada como respaldo y trazabilidad.
 * **`docs/technical_specs/`**: Especificaciones técnicas detalladas, mapeos de linaje de datos, contratos de esquemas y requerimientos no funcionales.
 * **`docs/engineers_notes/`**: Bitácoras de ingeniería, registro de deuda técnica, decisiones de diseño rápido y análisis de causa raíz (RCA).
 * **`docs/architecture/`**: Diagramas de arquitectura multi-cloud, flujos de datos e información estratégica de las capas Medallion (Bronze, Silver, Gold).
