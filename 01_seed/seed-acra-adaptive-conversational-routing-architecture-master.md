@@ -17,11 +17,11 @@ project_name: "ACRA-Adaptive-Conversational-Routing-Architecture"
 repository_name: "ACRA-Adaptive Conversational Routing Architecture"
 project_type: "ml-system"
 repository_mode: "single-project"
-generated_at: "2026-09-17T03:25:00-03:00"
-generated_by: "Antigravity Agent (Claude 3.7 Sonnet / Antigravity IDE)"
+generated_at: "2026-09-22T21:49:00-03:00"
+generated_by: "Antigravity Agent (Gemini 3.8 Flash / Antigravity IDE)"
 repository_root: "d:/0001 HyperScale Thinking/PROYECTOS CLOUD/Research and Development/ACRA-Adaptive Conversational Routing Architecture"
 git_branch: "master"
-git_commit: "c95cb03"
+git_commit: "b66ce38"
 working_tree_state: "dirty"
 analysis_mode: "static"
 coverage_level: "high"
@@ -94,32 +94,61 @@ known_analysis_limits:
 ### 2.2 Árbol estructural del repositorio (excluyendo ruido)
 ```text
 .
+├── .context/                          # Satélite topológico y beacons iDirectory v3.0
 ├── .github/workflows/ci.yml           # Integración continua automatizada
-├── 001_Seed/                          # ADN del proyecto y semillas maestras
+├── 01_seed/                           # ADN del proyecto y memoria técnica profunda
+│   ├── .context.yaml                  # Beacon de contexto
 │   └── seed-acra-adaptive-conversational-routing-architecture-master.md
 ├── 02_Foundation/                     # Fundamentos y especificaciones del motor
-├── 03_research/                    # Investigaciones empíricas y benchmarks LiC
-│   └── experiments/                   # 5 simulaciones experimentales
-├── artifacts/                         # Especificaciones de evolución (EVO ACRA.md, planes)
+│   └── Engine/                        # Gobernanza técnica y readme de framework
+├── 03_research/                       # Investigaciones empíricas y benchmarks LiC
+│   ├── experiments/                   # 5 scripts de experimentos empíricos
+│   │   ├── exp_01_baseline_degradation.py
+│   │   ├── exp_02_acra_vs_baseline.py
+│   │   ├── exp_03_ccr_sensitivity.py
+│   │   ├── exp_04_edge_router_accuracy.py
+│   │   ├── exp_05_ablation_study.py
+│   │   └── results/                   # 5 telemetrías JSON resultantes de experimentos
+│   ├── notebooks/                     # Notebooks de exploración y análisis (EDA)
+│   └── prompts/                       # Estructuras de prompts y árboles de contexto
+├── artifacts/                         # Artefactos del proyecto (iDirectory v3.0)
+│   ├── MetricsThinking.md             # Reporte forense ejecutivo (Score: 76.67%)
+│   ├── MetricsThinking.json           # Telemetría estructurada de auditoría
+│   ├── plans/                         # Planes de capacidad y diseño
+│   │   ├── active/                    # Planes activos vigentes
+│   │   │   ├── ACRA_Hierarchical_Agent_Router_Evolution_Plan.md  # Plan maestro integral
+│   │   │   └── INFERRED_ROADMAP.md    # Roadmap operacional en 10 etapas
+│   │   ├── archive/                   # Histórico de planes archivados
+│   │   │   └── ACRA_Plan_Mejora_DeepMind_Antigravity-GPT SOL.md
+│   │   └── metricsthinking/           # Copia sincronizada del reporte forense
+│   └── specs/                         # Especificaciones técnicas formales
+│       └── EVO ACRA.md                # Especificación canónica de evolución
 ├── config/                            # Configuraciones YAML
 │   ├── acra_config.yaml               # Configuración central
 │   ├── policies/hysteresis.yaml       # Política de histéresis de afinidad
 │   ├── profiles/model_profiles.yaml   # 7 perfiles de capacidad abstractos
 │   └── providers/                     # Configs de adaptadores (google, anthropic, openai, local)
 ├── data/                              # Datasets y métricas de procesamiento
-├── docs/                              # Documentación técnica, ADRs 001-004, RFCs y STRIDE
-├── schemas/                           # 6 Esquemas formales JSON
+│   ├── processed/                     # Datos sintéticos y resúmenes procesados
+│   └── raw/                           # Datasets sin procesar
+├── docs/                              # Documentación técnica, ADRs 001-004, benchmarks y STRIDE
+├── schemas/                           # 10 Esquemas formales JSON Schema
 ├── scripts/                           # Scripts de síntesis, benchmarks y auditoría
+│   ├── generate_benchmark_dataset.py
+│   ├── run_all_experiments.py
+│   └── verify_reproducibility.py
 ├── src/core/                          # Código fuente de producción
 │   ├── agents/                        # Factory, Registry y FSM de Agentes
+│   ├── audit/                         # Adaptadores CEA y auditoría contextual
 │   ├── context/                       # Pipeline de 13 fases e ingeniería de contexto
 │   ├── contracts/                     # Modelos y contratos Pydantic libres de modelos
 │   ├── economy/                       # Economía de tokens, modelos de costo y procedencia
 │   ├── fsm/                           # FSMs descompuestas (Session, Objective, Task, Handoff)
+│   ├── models/                        # Adaptadores y calibradores empíricos
 │   ├── orchestration/                 # HierarchicalOrchestrator, Planner, Consolidator
 │   ├── providers/                     # Adaptadores de modelos (Google, Anthropic, OpenAI, Local)
 │   ├── routing/                       # ModelResolver, IntakeRouter, CacheAwareRouter
-│   └── security/                      # HandoffPolicyGate, ToolAuthorizationGate, Locks
+│   └── security/                      # HandoffPolicyGate, ToolAuthorizationGate, Concurrency
 └── tests/                             # Suite de pruebas (165 pruebas automatizadas, 100% pass)
     ├── benchmark/                     # Degradation benchmarks y CCR
     ├── e2e/                           # Ciclo de vida E2E multi-agente
@@ -275,6 +304,10 @@ Respuesta Consolidada Final
 4. `routing_decision.json`: Registro de decisiones de resolución y enrutamiento.
 5. `model_profile.json`: Esquema del registro de capacidades de modelos.
 6. `hysteresis_policy.json`: Esquema de la política de histéresis de caché.
+7. `agent_definition.schema.json`: Esquema formal de definición de agentes.
+8. `audit_result.schema.json`: Esquema formal de resultados de auditoría.
+9. `cache_continuity.schema.json`: Esquema de telemetría de continuidad de caché.
+10. `handoff_envelope.schema.json`: Esquema formal del sobre de handoff tipado.
 
 ---
 
@@ -292,7 +325,7 @@ Respuesta Consolidada Final
 
 ### 5.2 Perfiles de ejecución
 - [CONFIRMADO] **Dev / Local:** Inferencia mediante stubs deterministas locales y `LocalAdapter` con coste cero de tokens.
-- [CONFIRMADO] **Test / CI:** Ejecución completa de la suite de 165 pruebas automatizadas bajo pytest en menos de 2 segundos.
+- [CONFIRMADO] **Test / CI:** Ejecución completa de la suite de 165 pruebas automatizadas bajo pytest en menos de 3 segundos.
 - [DECLARADO] **Prod (Kubernetes):** Pod sin estado con variables inyectadas mediante Kubernetes Secrets y ConfigMaps.
 
 ### 5.3 Prerrequisitos de sistema e infraestructura
@@ -361,15 +394,30 @@ Respuesta Consolidada Final
 ## 9. ESTADO REAL, DEUDA TÉCNICA Y LIMITACIONES
 
 ### 9.1 Nivel de madurez y avance real del proyecto
-- [CONFIRMADO] **Estado Actual:** Arquitectura de Producción / Grado Investigación (11 fases completadas al 100%).
+- [CONFIRMADO] **Auditoría Forense MetricsThinking™:** Calificación consolidada de **`76.67% / 100.0%`**, ubicando al sistema en la banda de **Madurez Avanzada / Pre-producción (75.0% - 89.9%)**.
+- [CONFIRMADO] **Módulos Canónicos Evaluados (Ground Truth):**
+  - M01 (Descubrimiento): 100.0% 🟢 Done
+  - M02 (Arquitectura): 100.0% 🟢 Done
+  - M03 (Gobernanza): 66.7% 🔵 Active (Cuello de botella activo: reglas cQS formales)
+  - M04 (Readiness): 100.0% 🟢 Done
+  - M05 (Core Engine): 100.0% 🟢 Done
+  - M06 (Interoperabilidad): 33.3% 🔵 Active
+  - M07 (QA & Stress): 100.0% 🟢 Done
+  - M08 (Validación Organizacional): 0.0% ⚪ Backlog
+  - M09 (CI/CD): 100.0% 🟢 Done
+  - M10 (Cierre y Documentación): 66.7% 🔵 Active
 - [CONFIRMADO] **165 Pruebas Pasando al 100%:** Incluye los 20 casos de prueba obligatorios, 5 experimentos empíricos replicados, adapters de 4 proveedores y validación de 10 invariantes arquitectónicos.
+- [CONFIRMADO] **Planes Activos y Roadmap Sincronizados:**
+  - Plan Arquitectónico Maestro: `artifacts/plans/active/ACRA_Hierarchical_Agent_Router_Evolution_Plan.md`.
+  - Roadmap Operacional en 10 Fases: `artifacts/plans/active/INFERRED_ROADMAP.md`.
 
 ### 9.2 Deuda técnica identificada y stubs pendientes
 - [CONFIRMADO] Los adaptadores para Anthropic y OpenAI operan como stubs conformes a protocolo para pruebas sin coste de API en entornos CI. La integración de sockets HTTP en vivo para estos dos proveedores sigue el mismo patrón implementado en `GoogleGenAIAdapter`.
 - [DECLARADO] El almacenamiento de caché de tensores y estados de FSM es actualmente en memoria de proceso; para despliegues distribuidos multi-nodo en Kubernetes se recomienda incorporar un driver de persistencia compartida (Redis).
+- [CONFIRMADO] En M08, pendiente implementación de tableros ejecutivos o interfaz CLI de diagnóstico operacional (`src/dashboards/`).
 
 ### 9.3 Inconsistencias entre código y documentación
-- [CONFIRMADO] Ninguna. Toda la documentación técnica (`README.md`, `README_ES.md`, ADRs, schemas) ha sido sincronizada con el código fuente y validada por pruebas automatizadas.
+- [CONFIRMADO] Ninguna. Toda la documentación técnica (`README.md`, `README_ES.md`, ADRs, schemas, árbol iDirectory v3.0 en `artifacts/` y `03_research/`) se encuentra sincronizada con el código fuente y validada por la auditoría de reproducibilidad.
 
 ---
 
